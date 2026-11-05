@@ -1,0 +1,256 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@400;500;600;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --color-rice: #f5f5f0;
+  --color-ink: #2d4030;
+  --color-terracotta: #8a3324;
+  --font-display: "DM Serif Display", Georgia, serif;
+  --font-sans: "Inter", "Noto Sans", system-ui, sans-serif;
+}
+
+:root { font-family: var(--font-sans); color: #2d4030; background: #f5f5f0; font-synthesis: none; text-rendering: optimizeLegibility; }
+html { scroll-behavior: smooth; }
+body { margin: 0; min-width: 320px; }
+button, a { -webkit-tap-highlight-color: transparent; }
+button { cursor: pointer; }
+.section-kicker { font-size: 10px; font-weight: 700; letter-spacing: .24em; text-transform: uppercase; color: rgba(45,64,48,.48); }
+.section-title { margin-top: 18px; font-family: var(--font-display); font-size: clamp(3rem, 6vw, 6.4rem); line-height: .9; letter-spacing: -.06em; }
+.section-title em { color: #8a3324; font-style: italic; }
+.bicycle-svg { display: block; width: 100%; height: auto; }
+::selection { color: #f5f5f0; background: #2d4030; }
+
+.ambient-background {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  opacity: .14;
+  isolation: isolate;
+}
+
+.ambient-background::before,
+.ambient-background::after,
+.ambient-background__shape {
+  position: absolute;
+  display: block;
+  pointer-events: none;
+  content: '';
+  animation-play-state: paused;
+}
+
+.ambient-background.is-visible::before,
+.ambient-background.is-visible::after,
+.ambient-background.is-visible .ambient-background__shape {
+  animation-play-state: running;
+}
+
+.ambient-background::before {
+  inset: -12%;
+  background-size: 150% 150%;
+  animation: ambient-drift 20s ease-in-out infinite alternate;
+}
+
+.ambient-background::after {
+  inset: 0;
+  opacity: .58;
+  background: linear-gradient(120deg, transparent 0 35%, rgba(245,245,240,.58) 50%, transparent 65%);
+  background-size: 220% 100%;
+}
+
+.ambient-background__shape--one,
+.ambient-background__shape--two {
+  border-radius: 999px;
+  filter: blur(1px);
+  opacity: .42;
+  transform: translate3d(0, 0, 0);
+}
+
+.ambient-background__shape--one {
+  animation: ambient-float 18s ease-in-out infinite alternate;
+}
+
+.ambient-background__shape--one {
+  width: 30vw;
+  height: 14vw;
+  max-width: 360px;
+  max-height: 180px;
+  right: -8vw;
+  top: 12%;
+}
+
+.ambient-background__shape--two {
+  width: 22vw;
+  height: 12vw;
+  max-width: 280px;
+  max-height: 150px;
+  left: -6vw;
+  bottom: 10%;
+}
+
+.ambient-rice-flow::before {
+  background: radial-gradient(circle at 20% 28%, rgba(138,51,36,.18), transparent 34%), radial-gradient(circle at 78% 70%, rgba(45,64,48,.14), transparent 38%);
+}
+
+.ambient-rice-flow .ambient-background__shape--one {
+  background: rgba(138,51,36,.14);
+}
+
+.ambient-rice-flow .ambient-background__shape--two {
+  background: rgba(45,64,48,.1);
+}
+
+.ambient-contour-lines::before {
+  inset: -20%;
+  background-image: repeating-radial-gradient(ellipse at 30% 60%, transparent 0 20px, rgba(45,64,48,.14) 21px 22px, transparent 23px 43px);
+  background-size: 520px 360px;
+}
+
+.ambient-contour-lines .ambient-background__shape--one,
+.ambient-contour-lines .ambient-background__shape--two {
+  border: 1px solid rgba(45,64,48,.1);
+  background: transparent;
+}
+
+.ambient-coastal-wave::before {
+  background: repeating-linear-gradient(168deg, transparent 0 30px, rgba(45,64,48,.11) 31px 32px, transparent 33px 64px);
+  background-size: 100% 190px;
+}
+
+.ambient-coastal-wave .ambient-background__shape--one {
+  background: rgba(45,64,48,.1);
+}
+
+.ambient-coastal-wave .ambient-background__shape--two {
+  background: rgba(138,51,36,.1);
+}
+
+.ambient-passport-grain::before {
+  background-image: radial-gradient(rgba(245,245,240,.18) .7px, transparent .8px), radial-gradient(rgba(196,212,197,.12) .7px, transparent .8px);
+  background-position: 0 0, 12px 15px;
+  background-size: 22px 22px, 29px 29px;
+  animation-duration: 24s;
+}
+
+.ambient-passport-grain::after {
+  background: linear-gradient(90deg, rgba(196,212,197,.08), transparent 45%, rgba(196,212,197,.08));
+}
+
+.ambient-passport-grain .ambient-background__shape--one,
+.ambient-passport-grain .ambient-background__shape--two {
+  border: 1px solid rgba(196,212,197,.14);
+  background: transparent;
+}
+
+.ambient-terracotta-glow::before {
+  background: radial-gradient(circle at 18% 32%, rgba(245,245,240,.16), transparent 35%), radial-gradient(circle at 82% 68%, rgba(45,64,48,.14), transparent 38%);
+}
+
+.ambient-terracotta-glow .ambient-background__shape--one {
+  background: rgba(245,245,240,.12);
+}
+
+.ambient-terracotta-glow .ambient-background__shape--two {
+  background: rgba(45,64,48,.12);
+}
+
+@keyframes ambient-drift {
+  from { transform: translate3d(-8px, -5px, 0); }
+  to { transform: translate3d(10px, 7px, 0); }
+}
+
+@keyframes ambient-float {
+  from { transform: translate3d(-7px, 5px, 0); }
+  to { transform: translate3d(8px, -6px, 0); }
+}
+
+@keyframes ambient-mobile-drift {
+  from { transform: translate3d(-4px, -3px, 0); }
+  to { transform: translate3d(5px, 4px, 0); }
+}
+
+@keyframes ambient-mobile-float {
+  from { transform: translate3d(-3px, 2px, 0); }
+  to { transform: translate3d(4px, -3px, 0); }
+}
+
+@media (max-width: 640px) {
+  .ambient-background { opacity: .1; }
+  .ambient-background::before { inset: -8%; }
+  .ambient-background::before { animation-name: ambient-mobile-drift; animation-duration: 28s; }
+  .ambient-background::after { opacity: .34; }
+  .ambient-background__shape--one { opacity: .24; animation-name: ambient-mobile-float; animation-duration: 28s; }
+  .ambient-background__shape--two { opacity: .22; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .ambient-background::before,
+  .ambient-background::after,
+  .ambient-background__shape { animation: none; }
+}
+
+/* Route-to-route transition: opacity and a restrained horizontal translation only. */
+.route-transition {
+  min-width: 0;
+  animation-duration: 360ms;
+  animation-timing-function: ease-out;
+  animation-fill-mode: both;
+}
+
+.route-transition--forward {
+  animation-name: route-enter-forward;
+}
+
+.route-transition--backward {
+  animation-name: route-enter-backward;
+}
+
+@keyframes route-enter-forward {
+  from { opacity: 0; transform: translateX(16px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes route-enter-backward {
+  from { opacity: 0; transform: translateX(-16px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .route-transition,
+  .route-transition--forward,
+  .route-transition--backward {
+    animation: none;
+    transform: none;
+    opacity: 1;
+  }
+}
+
+.journey-map-node:focus-visible { outline: none; }
+.journey-map-node:focus-visible > circle:first-of-type { stroke: #8a3324; stroke-width: 4; }
+
+.route-transition-overlay { contain: layout paint; }
+.transition-bike { display: block; width: clamp(64px, 10vw, 132px); height: auto; }
+.journey-map-node:focus-visible { outline: none; }
+.journey-map-node:focus-visible > circle:first-of-type { stroke: #8a3324; stroke-width: 4; }
+@media (max-width: 640px) {
+  .transition-bike { width: 18vw; min-width: 0; max-width: 92px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .transition-bike__wheel,
+  .transition-bike__crank { transform: none !important; }
+}
+
