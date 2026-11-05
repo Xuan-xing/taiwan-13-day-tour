@@ -10,6 +10,8 @@ export const TAICHUNG_REGION = {
   storyTitle: 'Old city to sea wind.',
   storyBody: 'A two-day rhythm of heritage streets, greenways and a long coastal light change.',
   visualPreset: 'urban',
+  heroImage: '/images/regions/taichung/central-bookstore.jpg',
+  heroImageAlt: 'Central Bookstore in Taichung old city',
   passportStops: [
     { id: 'taichung-central-bookstore', name: 'Central Bookstore', place: 'Taichung old city', regionId: 'taichung', day: 1, imageAlt: 'Central Bookstore in Taichung', status: 'available', color: '#8A3324', icon: '✦' },
     { id: 'taichung-theater', name: 'National Taichung Theater', place: 'Taichung civic centre', regionId: 'taichung', day: 1, imageAlt: 'National Taichung Theater curves', status: 'available', color: '#1F5149', icon: '◌' },
@@ -38,8 +40,8 @@ export const TAICHUNG_REGION = {
       transitConnection: 'Urban riding connects the listed stops; exact bike parking and access rules need confirmation.',
       transportPlan: 'Ride the supplied city and coastal segments, with time reserved for stops at the theater and wetlands.',
       nextConnection: 'Confirm the overnight location and the transfer into Day 2 before finalizing the route.',
-      image: null,
-      imageAlt: 'Taichung old city streets and the western coastline',
+      image: '/images/regions/taichung/gaomei-wetlands.jpg',
+      imageAlt: 'Gaomei Wetlands on the Taichung west coast',
       verificationStatus: 'source-provided',
       verificationNotes: [
         'Distances are segment estimates from the uploaded text, not a verified GPX total.',
@@ -67,8 +69,8 @@ export const TAICHUNG_REGION = {
       transitConnection: 'City riding only; exact parking and pedestrian-zone rules need confirmation.',
       transportPlan: 'Use short urban rides and walk the market areas after parking the bike.',
       nextConnection: 'The next region is Tainan; the evening transfer and bike carriage method require confirmation.',
-      image: null,
-      imageAlt: 'Audit Village red brick lanes and Taichung greenway',
+      image: '/images/regions/taichung/audit-village.jpg',
+      imageAlt: 'Audit Village red brick lanes in Taichung',
       verificationStatus: 'source-provided',
       verificationNotes: [
         'Full route distance and riding time were not included in the source text.'

@@ -10,6 +10,8 @@ export const GREEN_ISLAND_TAITUNG_REGION = {
   storyTitle: 'Blue water, open fields.',
   storyBody: 'The route moves from island water and hot spring steam to balloon skies, rice fields and Taitung nights.',
   visualPreset: 'wild',
+  heroImage: '/images/regions/green-island-taitung/green-island-lighthouse.jpg',
+  heroImageAlt: 'Green Island Lighthouse and coastline',
   passportStops: [
     { id: 'green-island-lighthouse', name: 'Green Island Lighthouse', place: 'Green Island', regionId: 'green-island-taitung', day: 7, imageAlt: 'Green Island Lighthouse and coastline', status: 'available', color: '#8A3324', icon: '⌂' },
     { id: 'green-island-zhaori', name: 'Zhaori Hot Spring', place: 'Green Island', regionId: 'green-island-taitung', day: 7, imageAlt: 'Zhaori Hot Spring on Green Island', status: 'available', color: '#1F5149', icon: '≈' },
@@ -41,8 +43,8 @@ export const GREEN_ISLAND_TAITUNG_REGION = {
       transitConnection: 'The ferry connects Taitung and Green Island; schedule and bicycle rules require verification.',
       transportPlan: 'Morning ferry to Green Island, island cycling, water activity and overnight stay before the morning return.',
       nextConnection: 'Return to Taitung on Day 8 morning before continuing to Luye and the East Rift Valley.',
-      image: null,
-      imageAlt: 'Green Island coastline, lighthouse and hot spring',
+      image: '/images/regions/green-island-taitung/green-island-snorkeling.jpg',
+      imageAlt: 'Snorkelling water around Green Island',
       verificationStatus: 'source-provided',
       verificationNotes: [
         'Ferry timetable, sea conditions, bicycle carriage and water activity operators require verification.'
@@ -70,8 +72,8 @@ export const GREEN_ISLAND_TAITUNG_REGION = {
       transitConnection: 'Ferry return connects to Taitung city; the Luye transfer and bike transport need confirmation.',
       transportPlan: 'Morning ferry return, supported transfer toward Luye, then bicycle riding around Brown Boulevard before Tiehua Village.',
       nextConnection: 'Day 9 continues through Chenggong and Sanxiantai before the transfer toward Yilan or Su-Ao.',
-      image: null,
-      imageAlt: 'Taitung rice fields, Brown Boulevard and evening culture',
+      image: '/images/regions/green-island-taitung/brown-boulevard.jpg',
+      imageAlt: 'Brown Boulevard rice fields in Taitung',
       verificationStatus: 'source-provided',
       verificationNotes: [
         'Ferry return time, balloon schedule and bike logistics between Luye and Taitung require verification.'

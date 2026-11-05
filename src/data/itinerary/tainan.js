@@ -10,6 +10,8 @@ export const TAINAN_REGION = {
   storyTitle: 'Art, history, harbour light.',
   storyBody: 'Short city rides leave room for courtyards, old shopfronts and the slow edge of the sea.',
   visualPreset: 'heritage',
+  heroImage: '/images/regions/tainan/tainan-art-museum.jpg',
+  heroImageAlt: 'Tainan Art Museum II architecture',
   passportStops: [
     { id: 'tainan-art-museum', name: 'Tainan Art Museum', place: 'Fucheng cultural district', regionId: 'tainan', day: 3, imageAlt: 'Tainan Art Museum architecture', status: 'available', color: '#8A3324', icon: '✦' },
     { id: 'tainan-anping-fort', name: 'Anping Fort', place: 'Anping harbour', regionId: 'tainan', day: 4, imageAlt: 'Anping Fort historic walls', status: 'available', color: '#1F5149', icon: '▧' },
@@ -39,8 +41,8 @@ export const TAINAN_REGION = {
       transitConnection: 'Start from the city or railway-station area by YouBike; exact station pairing needs confirmation.',
       transportPlan: 'Use short city rides between museum, department store and temple district stops.',
       nextConnection: 'Remain in Tainan for Day 4 and confirm the next-day lodging location.',
-      image: null,
-      imageAlt: 'Tainan museum architecture and historic streets',
+      image: '/images/regions/tainan/confucius-temple-cultural-district.jpg',
+      imageAlt: 'Confucius Temple Cultural District in Tainan',
       verificationStatus: 'source-provided',
       verificationNotes: [
         'YouBike availability, parking and museum opening hours are not yet verified.'
@@ -68,8 +70,8 @@ export const TAINAN_REGION = {
       transitConnection: 'Ride via Anping Road or city routes; bridge and coastal access rules need confirmation.',
       transportPlan: 'Use a city bike for the heritage loop, then continue toward Yuguang Island for the final walk.',
       nextConnection: 'The next region is Kaohsiung; confirm the evening transfer and bicycle handling.',
-      image: null,
-      imageAlt: 'Anping harbour, historic fort walls and Yuguang Island coast',
+      image: '/images/regions/tainan/anping-harbor.jpg',
+      imageAlt: 'Anping Harbor in Tainan',
       verificationStatus: 'source-provided',
       verificationNotes: [
         'Exact route distance, bridge access and bike parking remain unverified.'
