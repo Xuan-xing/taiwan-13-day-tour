@@ -10,6 +10,8 @@ export const KAOHSIUNG_REGION = {
   storyTitle: 'Hills to harbour nights.',
   storyBody: 'A cultural descent from the foothills into the port, with ferry air and city lights in between.',
   visualPreset: 'harbour',
+  heroImage: '/images/regions/kaohsiung/pier-2.jpg',
+  heroImageAlt: 'Pier-2 Art Center harbour warehouses in Kaohsiung',
   passportStops: [
     { id: 'kaohsiung-pier-2', name: 'Pier-2 Art Center', place: 'Kaohsiung harbour', regionId: 'kaohsiung', day: 5, imageAlt: 'Pier-2 Art Center harbour warehouses', status: 'available', color: '#8A3324', icon: '✦' },
     { id: 'kaohsiung-qijin', name: 'Qijin Lighthouse', place: 'Qijin island', regionId: 'kaohsiung', day: 6, imageAlt: 'Qijin Lighthouse above the harbour', status: 'available', color: '#1F5149', icon: '⌂' },
@@ -39,8 +41,8 @@ export const KAOHSIUNG_REGION = {
       transitConnection: 'Meinong-to-city transfer details were not supplied; confirm shuttle, rail or private transfer.',
       transportPlan: 'Use a supported transfer from Meinong to central Kaohsiung, then ride the harbour loop.',
       nextConnection: 'Stay in Kaohsiung for the Day 6 Qijin and Lotus Pond route.',
-      image: null,
-      imageAlt: 'Kaohsiung harbour warehouses and Hakka craft culture',
+      image: '/images/regions/kaohsiung/meinong-village.jpg',
+      imageAlt: 'Meinong folk culture village in Kaohsiung',
       verificationStatus: 'source-provided',
       verificationNotes: [
         'Meinong transfer and bike rental details are not yet verified.',
@@ -69,8 +71,8 @@ export const KAOHSIUNG_REGION = {
       transitConnection: 'Qijin is reached by ferry; the Qijin-to-Lotus Pond transfer needs a confirmed bike-friendly option.',
       transportPlan: 'Ferry to Qijin, ride the island loop, then transfer toward Zuoying for Lotus Pond.',
       nextConnection: 'The next region is Green Island and Taitung; confirm the long-distance transfer and bike handling.',
-      image: null,
-      imageAlt: 'Qijin harbour, lighthouse and Lotus Pond pagodas',
+      image: '/images/regions/kaohsiung/qijin-lighthouse.jpg',
+      imageAlt: 'Qijin Lighthouse on Kaohsiung’s Qijin island',
       verificationStatus: 'source-provided',
       verificationNotes: [
         'Ferry timetable, bicycle carriage and Qijin rental availability remain unverified.'

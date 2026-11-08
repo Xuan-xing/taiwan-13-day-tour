@@ -10,6 +10,8 @@ export const SU_AO_YILAN_REGION = {
   storyTitle: 'Coastline to connection.',
   storyBody: 'Keep the riding segment light and leave space for the rail or shuttle handoff into the next coast.',
   visualPreset: 'transfer',
+  heroImage: '/images/regions/su-ao-yilan/nanfangao-fish-market.jpg',
+  heroImageAlt: 'Nanfangao fish market and harbour in Su-Ao',
   passportStops: [
     { id: 'chenggong-coast', name: 'Chenggong Coast', place: 'East Coast', regionId: 'su-ao-yilan', day: 9, imageAlt: 'Chenggong coast on Taiwan east coast', status: 'available', color: '#8A3324', icon: '≈' },
     { id: 'sanxiantai', name: 'Sanxiantai', place: 'East Coast bridge', regionId: 'su-ao-yilan', day: 9, imageAlt: 'Sanxiantai arch bridge', status: 'available', color: '#1F5149', icon: '⌁' },
@@ -39,8 +41,8 @@ export const SU_AO_YILAN_REGION = {
       transitConnection: 'Taiwan Rail or shuttle is planned after Sanxiantai; bicycle carriage rules and timetable require verification.',
       transportPlan: 'Short ride through Chenggong and Sanxiantai, followed by a confirmed rail or shuttle transfer to Yilan or Su-Ao.',
       nextConnection: 'Arrive in Su-Ao or Yilan for Day 10.',
-      image: null,
-      imageAlt: 'Sanxiantai bridge and Taiwan east coast',
+      image: '/images/regions/su-ao-yilan/sanxiantai.jpg',
+      imageAlt: 'Sanxiantai bridge on Taiwan east coast',
       verificationStatus: 'source-provided',
       verificationNotes: [
         'The route direction is user-provided, but exact rail station, departure time, bike rules and shuttle operator are unverified.'
@@ -63,8 +65,8 @@ export const SU_AO_YILAN_REGION = {
       transitConnection: 'Awaiting local connection details.',
       transportPlan: 'Placeholder only; no transport should be presented as confirmed.',
       nextConnection: 'Day 11 is reserved for Wushi Harbor and Guishan Island once details are supplied.',
-      image: null,
-      imageAlt: 'Su-Ao harbour image pending',
+      image: '/images/regions/su-ao-yilan/suao-cold-spring-park.jpg',
+      imageAlt: 'Su-Ao Cold Spring Park',
       verificationStatus: 'pending-user-data',
       verificationNotes: ['Detailed Su-Ao itinerary has not yet been provided.']
     },
@@ -85,8 +87,8 @@ export const SU_AO_YILAN_REGION = {
       transitConnection: 'Boat timetable, port access and bicycle storage require confirmation.',
       transportPlan: 'Placeholder only; do not present boat access or island landing as confirmed.',
       nextConnection: 'Day 12 begins the North Coast and Jiufen route.',
-      image: null,
-      imageAlt: 'Wushi Harbor and Guishan Island image pending',
+      image: '/images/regions/su-ao-yilan/guishan-island.jpg',
+      imageAlt: 'Guishan Island viewed from Wushi Harbor',
       verificationStatus: 'pending-user-data',
       verificationNotes: [
         'Detailed Wushi Harbor and Guishan Island itinerary has not yet been provided.',
