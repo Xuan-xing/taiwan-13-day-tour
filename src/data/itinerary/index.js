@@ -33,14 +33,14 @@ export const JOURNEY_MAP_NODES = [
 ];
 
 export const JOURNEY_MAP_SEGMENTS = [
-  { id: 'taichung-tainan', from: 'taichung', to: 'tainan', mode: 'land' },
-  { id: 'tainan-kaohsiung', from: 'tainan', to: 'kaohsiung', mode: 'land' },
-  { id: 'kaohsiung-taitung', from: 'kaohsiung', to: 'taitung', mode: 'transfer' },
-  { id: 'taitung-green-island', from: 'taitung', to: 'green-island', mode: 'ferry-out' },
-  { id: 'green-island-taitung', from: 'green-island', to: 'taitung', mode: 'ferry-return' },
-  { id: 'taitung-chenggong-sanxiantai', from: 'taitung', to: 'chenggong-sanxiantai', mode: 'land' },
-  { id: 'chenggong-sanxiantai-su-ao-yilan', from: 'chenggong-sanxiantai', to: 'su-ao-yilan', mode: 'rail' },
-  { id: 'su-ao-yilan-taipei', from: 'su-ao-yilan', to: 'taipei', mode: 'transfer' }
+  { id: 'taichung-tainan', from: 'taichung', to: 'tainan', mode: 'land', curve: 44 },
+  { id: 'tainan-kaohsiung', from: 'tainan', to: 'kaohsiung', mode: 'land', curve: 34 },
+  { id: 'kaohsiung-taitung', from: 'kaohsiung', to: 'taitung', mode: 'transfer', curve: 42 },
+  { id: 'taitung-green-island', from: 'taitung', to: 'green-island', mode: 'ferry-out', curve: 108 },
+  { id: 'green-island-taitung', from: 'green-island', to: 'taitung', mode: 'ferry-return', curve: 108 },
+  { id: 'taitung-chenggong-sanxiantai', from: 'taitung', to: 'chenggong-sanxiantai', mode: 'land', curve: -36 },
+  { id: 'chenggong-sanxiantai-su-ao-yilan', from: 'chenggong-sanxiantai', to: 'su-ao-yilan', mode: 'rail', curve: 38 },
+  { id: 'su-ao-yilan-taipei', from: 'su-ao-yilan', to: 'taipei', mode: 'transfer', curve: 32 }
 ];
 
 export const getRegionById = (regionId) => REGION_MATRIX.find((region) => region.id === regionId);

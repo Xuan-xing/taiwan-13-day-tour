@@ -2,19 +2,32 @@ import { createContext, useContext, useMemo, useReducer } from 'react';
 import { BADGES, ITINERARIES } from '../data';
 import { getRegionById, OVERVIEW_ROUTE_ID, REGION_MATRIX } from '../data/itinerary/index.js';
 
-const badgeForStop = (stop, index, previousBadges = []) => {
+const formatTaiwanDate = (date = new Date()) => {
+  const parts = new Intl.DateTimeFormat('en-US', {
+    timeZone: 'Asia/Taipei',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  }).formatToParts(date);
+  const values = Object.fromEntries(parts.map(({ type, value }) => [type, value]));
+  return `${values.year}.${values.month}.${values.day}`;
+};
+
+const badgeForStop = (stop, index, previousBadges = [], verifiedBadges = {}) => {
   const previous = previousBadges.find((badge) => badge.id === stop.id);
+  const verifiedAt = previous?.verifiedAt ?? verifiedBadges[stop.id] ?? null;
   return {
     ...stop,
-    state: previous?.state ?? stop.status ?? (index < 2 ? 'available' : 'locked'),
+    state: verifiedAt ? 'verified' : previous?.state ?? stop.status ?? (index < 2 ? 'available' : 'locked'),
+    verifiedAt,
   };
 };
 
-const badgesForRoute = (routeId, previousBadges = []) => {
+const badgesForRoute = (routeId, previousBadges = [], verifiedBadges = {}) => {
   const source = routeId === OVERVIEW_ROUTE_ID
     ? REGION_MATRIX.flatMap((region) => region.passportStops ?? []).slice(0, 6)
     : getRegionById(routeId)?.passportStops;
-  return source?.length ? source.map((stop, index) => badgeForStop(stop, index, previousBadges)) : BADGES;
+  return source?.length ? source.map((stop, index) => badgeForStop(stop, index, previousBadges, verifiedBadges)) : BADGES.map((badge) => ({ ...badge, verifiedAt: verifiedBadges[badge.id] ?? null }));
 };
 
 const initialRouteId = OVERVIEW_ROUTE_ID;
@@ -26,6 +39,7 @@ const initialState = {
   selectedItineraryId: 'art-01',
   activeSection: 'top',
   badges: badgesForRoute(initialRouteId),
+  verifiedBadges: {},
   activeBadgeId: null,
   isUploadModalOpen: false,
   uploadState: 'idle',
@@ -38,7 +52,7 @@ function reducer(state, action) {
     case 'SET_ACTIVE_ROUTE': {
       const routeExists = action.value === OVERVIEW_ROUTE_ID || REGION_MATRIX.some((region) => region.id === action.value);
       return routeExists
-        ? { ...state, activeRouteId: action.value, activeSection: 'top', badges: badgesForRoute(action.value, state.badges), activeBadgeId: null, isUploadModalOpen: false, uploadState: 'idle', uploadPreviewUrl: '' }
+        ? { ...state, activeRouteId: action.value, activeSection: 'top', badges: badgesForRoute(action.value, state.badges, state.verifiedBadges), activeBadgeId: null, isUploadModalOpen: false, uploadState: 'idle', uploadPreviewUrl: '' }
         : state;
     }
     case 'SET_ROUTE': {
@@ -60,12 +74,15 @@ function reducer(state, action) {
       return { ...state, isUploadModalOpen: false, activeBadgeId: null, uploadState: 'idle', uploadPreviewUrl: '' };
     case 'START_VERIFY':
       return { ...state, uploadState: 'verifying' };
-    case 'VERIFY_SUCCESS':
+    case 'VERIFY_SUCCESS': {
+      const verifiedAt = formatTaiwanDate();
       return {
         ...state,
         uploadState: 'success',
-        badges: state.badges.map((badge) => (badge.id === state.activeBadgeId ? { ...badge, state: 'verified' } : badge)),
+        verifiedBadges: { ...state.verifiedBadges, [state.activeBadgeId]: verifiedAt },
+        badges: state.badges.map((badge) => (badge.id === state.activeBadgeId ? { ...badge, state: 'verified', verifiedAt } : badge)),
       };
+    }
     case 'VERIFY_ERROR':
       return { ...state, uploadState: 'error' };
     case 'SET_PREVIEW':
