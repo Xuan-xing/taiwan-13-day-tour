@@ -17,7 +17,7 @@ export const KAOHSIUNG_REGION = {
     { id: 'kaohsiung-qijin', name: 'Qijin Lighthouse', place: 'Qijin island', regionId: 'kaohsiung', day: 6, imageAlt: 'Qijin Lighthouse above the harbour', status: 'available', color: '#1F5149', icon: '⌂' },
     { id: 'kaohsiung-lotus-pond', name: 'Lotus Pond', place: 'Zuoying', regionId: 'kaohsiung', day: 6, imageAlt: 'Lotus Pond pagodas in Kaohsiung', status: 'locked', color: '#C4D4C5', icon: '◈' }
   ],
-  contentNote: 'This latest uploaded itinerary supersedes the earlier order of Qijin on Day 5 and Pier-2 on Day 6.',
+  contentNote: 'Day 6 follows the requested order: Lotus Pond first, then Qijin and the sunset coast.',
   days: [
     {
       id: 'day-05',
@@ -52,27 +52,33 @@ export const KAOHSIUNG_REGION = {
     {
       id: 'day-06',
       day: 6,
-      title: 'Qijin Sea Breeze & Lotus Pond',
-      route: 'Qijin Ferry → Qihou Lighthouse → Qihou Fort → Rainbow Church → Lotus Pond',
+      title: 'Lotus Pond, Qijin & Harbour Sunset',
+      route: 'Lotus Pond → Qijin Ferry → Qihou Lighthouse → Qihou Fort → Qijin sunset',
       distanceKm: null,
       distanceNote: 'The source text does not provide a complete riding distance.',
       estimatedRideTime: null,
       elevationM: null,
       highlights: [
-        'Take the ferry to Qijin and ride the island loop by bicycle or e-bike.',
+        'Start at Lotus Pond and visit the Dragon and Tiger Pagodas before the coastal transfer.',
+        'Continue to Qijin by ferry and ride the island loop by bicycle or e-bike.',
         'Visit Qihou Lighthouse, Qihou Fort, Rainbow Church and Star Tunnel.',
-        'Stop for seafood along Qijin Old Street.',
-        'Continue to Lotus Pond and the Dragon and Tiger Pagodas for the final cultural stop.'
+        'Finish with seafood and sunset light along Qijin Old Street and the harbour.'
       ],
-      plannerNote: 'Allow buffer time for the ferry queue and the transfer from Qijin to Zuoying.',
+      plannerNote: 'Visit Lotus Pond early, then allow buffer time for the ferry queue and reach Qijin before sunset.',
       seasonalNote: 'No seasonal note was supplied; verify ferry operations and harbour wind conditions.',
       luggageTransfer: 'No luggage transfer arrangement was supplied; confirm hotel storage before the ferry ride.',
       bikeRental: 'The source text suggests bicycle or e-bike rental on Qijin; station and ferry carriage rules need confirmation.',
-      transitConnection: 'Qijin is reached by ferry; the Qijin-to-Lotus Pond transfer needs a confirmed bike-friendly option.',
-      transportPlan: 'Ferry to Qijin, ride the island loop, then transfer toward Zuoying for Lotus Pond.',
+      transitConnection: 'Confirm the bike-friendly transfer from Zuoying to the Qijin ferry after the Lotus Pond visit.',
+      transportPlan: 'Ride to Lotus Pond first, transfer to the Qijin ferry, complete the island loop, then stay for sunset.',
       nextConnection: 'The next region is Green Island and Taitung; confirm the long-distance transfer and bike handling.',
-      image: '/images/regions/kaohsiung/qijin-lighthouse.jpg',
-      imageAlt: 'Qijin Lighthouse on Kaohsiung’s Qijin island',
+      image: '/images/regions/kaohsiung/qijin-sunset.jpg',
+      imageAlt: 'Sunset over Qijin harbour in Kaohsiung',
+      images: [
+        { src: '/images/regions/kaohsiung/lotus-pond.jpg', alt: 'Lotus Pond pagodas in Kaohsiung' },
+        { src: '/images/regions/kaohsiung/lotus-pond-bridge.jpg', alt: 'Bridge over Lotus Pond in Kaohsiung' },
+        { src: '/images/regions/kaohsiung/qijin-lighthouse.jpg', alt: 'Qijin Lighthouse above the harbour' },
+        { src: '/images/regions/kaohsiung/qijin-sunset.jpg', alt: 'Sunset over Qijin harbour in Kaohsiung' }
+      ],
       verificationStatus: 'source-provided',
       verificationNotes: [
         'Ferry timetable, bicycle carriage and Qijin rental availability remain unverified.'

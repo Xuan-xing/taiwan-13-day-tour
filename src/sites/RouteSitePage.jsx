@@ -19,6 +19,7 @@ import { JINSHAN_PLANS } from '../data';
 import AmbientSectionBackground from '../components/AmbientSectionBackground';
 import SectionBikePass from '../components/SectionBikePass';
 import SectionProgress from '../components/SectionProgress';
+import MaokongTeaFeature from '../components/MaokongTeaFeature';
 
 const SECTION_LINKS = [
   ['Route', 'top'],
@@ -253,10 +254,15 @@ function Stat({ label, value }) {
 }
 
 function RouteImage({ day }) {
+  const images = day.images?.length ? day.images : (day.image ? [{ src: day.image, alt: day.imageAlt }] : []);
   return (
     <div className="relative aspect-[16/9] overflow-hidden bg-[#dfe8e0] sm:aspect-[16/10]">
-      {day.image ? (
-        <img src={day.image} alt={day.imageAlt} loading="lazy" decoding="async" className="h-full w-full object-cover" />
+      {images.length > 1 ? (
+        <div className="grid h-full grid-cols-2">
+          {images.map((image) => <img key={image.src} src={image.src} alt={image.alt} loading="lazy" decoding="async" className="h-full min-h-0 w-full object-cover" />)}
+        </div>
+      ) : images.length === 1 ? (
+        <img src={images[0].src} alt={images[0].alt} loading="lazy" decoding="async" className="h-full w-full object-cover" />
       ) : (
         <div className="h-full w-full bg-[radial-gradient(circle_at_20%_20%,rgba(138,51,36,.26),transparent_36%),linear-gradient(135deg,#dfe8e0,#a2b8a7)]" aria-hidden="true" />
       )}
@@ -436,6 +442,8 @@ function RoutePassport({ region }) {
   const closeButtonRef = useRef(null);
   const lastFocusedRef = useRef(null);
   const previewUrlRef = useRef('');
+  const cameraInputRef = useRef(null);
+  const libraryInputRef = useRef(null);
   const routeBadges = region.passportStops?.map((stop) => state.badges.find((badge) => badge.id === stop.id) ?? stop) ?? state.badges;
   const activeBadge = routeBadges.find((badge) => badge.id === state.activeBadgeId);
 
@@ -488,7 +496,7 @@ function RoutePassport({ region }) {
   };
 
   const choosePhoto = (event) => {
-    const file = event.target.files?.[0];
+    const file = event.currentTarget.files?.[0];
     if (!file) return;
     releasePreviewUrl();
     const url = URL.createObjectURL(file);
@@ -496,7 +504,11 @@ function RoutePassport({ region }) {
     setPreview(url);
     dispatch({ type: 'SET_PREVIEW', value: url });
     dispatch({ type: 'START_VERIFY' });
+    event.currentTarget.value = '';
   };
+
+  const openCamera = () => cameraInputRef.current?.click();
+  const openPhotoLibrary = () => libraryInputRef.current?.click();
 
   const goToPlanner = (event) => {
     event.preventDefault();
@@ -508,7 +520,7 @@ function RoutePassport({ region }) {
     <section id="passport" className="relative scroll-mt-24 overflow-hidden bg-ink px-4 py-20 text-rice sm:px-8 sm:py-28">
       <AmbientSectionBackground variant="passport-grain" />
       <div className="relative z-10 mx-auto max-w-7xl"><div className="grid gap-12 lg:grid-cols-[.8fr_1.2fr] lg:items-end"><div><p className="mb-5 text-xs font-bold uppercase tracking-[.28em] text-[#c4d4c5]">Digital passport / {routeBadges.length} stamps</p><h2 className="font-display text-[clamp(3rem,6vw,6.5rem)] leading-[.9] tracking-[-.07em]">Leave with<br /><em className="text-[#c4d4c5]">proof.</em></h2><p className="mt-7 max-w-sm text-base leading-7 text-rice/60">Collect the landmarks that made this route yours. Choose a badge to open the camera window and verify a moment.</p></div><div className="grid gap-3 sm:grid-cols-2">{routeBadges.map((badge) => { const locked = badge.state === 'locked'; return <button key={badge.id} type="button" disabled={locked} aria-disabled={locked} onClick={() => dispatch({ type: 'OPEN_UPLOAD', value: badge.id })} className={`group rounded-3xl border p-5 text-left transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rice focus-visible:ring-offset-2 focus-visible:ring-offset-ink ${locked ? 'cursor-not-allowed border-rice/10 opacity-45' : 'border-rice/15 hover:border-rice/40'}`}><div className="flex items-start justify-between gap-3"><span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-current text-xl" style={{ color: badge.color }}>{badge.icon}</span>{badge.state === 'verified' ? <span aria-label={'Verified on ' + (badge.verifiedAt ?? 'recorded date')} className="inline-flex min-w-[5.5rem] rotate-[-6deg] flex-col items-center justify-center rounded-full border-2 border-[#d9aa3b] px-2 py-1 text-[#d9aa3b]"><span className="flex items-center gap-1 text-[9px] font-bold uppercase tracking-[.12em]"><Check size={11} aria-hidden="true" /> Verified</span>{badge.verifiedAt && <time className="mt-0.5 text-[9px] font-semibold tracking-[.08em]" dateTime={badge.verifiedAt.replaceAll('.', '-')}>{badge.verifiedAt}</time>}</span> : <ArrowUpRight size={16} className="text-rice/40" aria-hidden="true" />}</div><h3 className="mt-8 font-display text-2xl">{badge.name}</h3><p className="mt-1 text-xs text-rice/50">{badge.place}</p></button>; })}</div></div></div>
-      {state.isUploadModalOpen && activeBadge && <div className="fixed inset-0 z-50 grid place-items-center bg-ink/70 px-4 backdrop-blur-sm"><div ref={dialogRef} role="dialog" aria-modal="true" aria-labelledby="route-passport-title" aria-describedby="route-passport-status" className="relative max-h-[90svh] w-full max-w-md overflow-y-auto rounded-[2rem] bg-rice p-5 text-ink shadow-2xl sm:p-7"><button ref={closeButtonRef} type="button" onClick={closeUpload} aria-label="Close upload modal" className="absolute right-5 top-5 min-h-11 min-w-11 rounded-full p-2 text-ink/50 hover:bg-ink/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta"><X size={18} aria-hidden="true" /></button><p id="route-passport-title" className="pr-12 text-[10px] font-bold uppercase tracking-[.24em] text-ink/45">Passport stamp / {activeBadge.name}</p><div className="relative mt-5 aspect-[4/3] overflow-hidden rounded-2xl bg-ink"><div className="absolute inset-5 border border-rice/50" />{preview && <img src={preview} alt={`Selected photo for ${activeBadge.name}`} decoding="async" className="h-full w-full object-cover opacity-70" />}<div id="route-passport-status" role="status" aria-live="polite" aria-busy={state.uploadState === 'verifying'} className="absolute inset-x-0 bottom-5 text-center text-xs font-bold uppercase tracking-[.2em] text-rice">{state.uploadState === 'verifying' ? 'Verifying landmark...' : state.uploadState === 'success' ? 'Landmark verified' : 'Frame your landmark'}</div></div>{state.uploadState === 'success' ? <div className="mt-5 flex flex-col gap-3 rounded-xl bg-[#dfe8e0] p-4 text-sm sm:flex-row sm:items-center sm:justify-between"><div><span className="flex items-center gap-2 font-semibold"><Check size={17} aria-hidden="true" /> Badge unlocked</span><p className="mt-1 text-xs text-ink/60">Verified on <time dateTime={activeBadge.verifiedAt?.replaceAll('.', '-')}>{activeBadge.verifiedAt}</time>.</p><p className="mt-1 text-xs text-ink/60">Next: choose pace and logistics in Planner.</p></div><a href="#planner" onClick={goToPlanner} className="inline-flex min-h-11 items-center justify-center rounded-full bg-ink px-4 py-2 text-xs font-semibold text-rice focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta">Continue to Planner</a></div> : <label htmlFor="route-passport-upload" className="mt-5 flex min-h-11 cursor-pointer items-center justify-between rounded-xl bg-ink px-4 py-3 text-sm font-semibold text-rice focus-within:ring-2 focus-within:ring-terracotta">{state.uploadState === 'verifying' ? 'Checking your frame' : 'Choose a photo'}<Download size={17} aria-hidden="true" /><input id="route-passport-upload" type="file" accept="image/*" className="sr-only" onChange={choosePhoto} disabled={state.uploadState === 'verifying'} aria-label="Choose a landmark photo" /></label>}</div></div>}
+      {state.isUploadModalOpen && activeBadge && <div className="fixed inset-0 z-50 grid place-items-center bg-ink/70 px-4 backdrop-blur-sm"><div ref={dialogRef} role="dialog" aria-modal="true" aria-labelledby="route-passport-title" aria-describedby="route-passport-status" className="relative max-h-[90svh] w-full max-w-md overflow-y-auto rounded-[2rem] bg-rice p-5 text-ink shadow-2xl sm:p-7"><button ref={closeButtonRef} type="button" onClick={closeUpload} aria-label="Close upload modal" className="absolute right-5 top-5 min-h-11 min-w-11 rounded-full p-2 text-ink/50 hover:bg-ink/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta"><X size={18} aria-hidden="true" /></button><p id="route-passport-title" className="pr-12 text-[10px] font-bold uppercase tracking-[.24em] text-ink/45">Passport stamp / {activeBadge.name}</p><div className="relative mt-5 aspect-[4/3] overflow-hidden rounded-2xl bg-ink"><div className="absolute inset-5 border border-rice/50" />{preview && <img src={preview} alt={`Selected photo for ${activeBadge.name}`} decoding="async" className="h-full w-full object-cover opacity-70" />}<div id="route-passport-status" role="status" aria-live="polite" aria-busy={state.uploadState === 'verifying'} className="absolute inset-x-0 bottom-5 text-center text-xs font-bold uppercase tracking-[.2em] text-rice">{state.uploadState === 'verifying' ? 'Verifying landmark...' : state.uploadState === 'success' ? 'Landmark verified' : 'Frame your landmark'}</div></div>{state.uploadState === 'success' ? <div className="mt-5 flex flex-col gap-3 rounded-xl bg-[#dfe8e0] p-4 text-sm sm:flex-row sm:items-center sm:justify-between"><div><span className="flex items-center gap-2 font-semibold"><Check size={17} aria-hidden="true" /> Badge unlocked</span><p className="mt-1 text-xs text-ink/60">Verified on <time dateTime={activeBadge.verifiedAt?.replaceAll('.', '-')}>{activeBadge.verifiedAt}</time>.</p><p className="mt-1 text-xs text-ink/60">Next: choose pace and logistics in Planner.</p></div><a href="#planner" onClick={goToPlanner} className="inline-flex min-h-11 items-center justify-center rounded-full bg-ink px-4 py-2 text-xs font-semibold text-rice focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta">Continue to Planner</a></div> : <div className="mt-5 grid gap-3 sm:grid-cols-2"><button type="button" onClick={openCamera} disabled={state.uploadState === 'verifying'} className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-ink px-4 py-3 text-sm font-semibold text-rice focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta disabled:cursor-not-allowed disabled:opacity-50" aria-label="Use camera to take a landmark photo">Use camera</button><button type="button" onClick={openPhotoLibrary} disabled={state.uploadState === 'verifying'} className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-ink/20 px-4 py-3 text-sm font-semibold text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta disabled:cursor-not-allowed disabled:opacity-50" aria-label="Choose a landmark photo from your photo library">Choose from photo library</button><input ref={cameraInputRef} id="route-passport-camera" type="file" accept="image/*" capture="environment" className="sr-only" onChange={choosePhoto} disabled={state.uploadState === 'verifying'} aria-label="Take a landmark photo with camera" /><input ref={libraryInputRef} id="route-passport-library" type="file" accept="image/*" className="sr-only" onChange={choosePhoto} disabled={state.uploadState === 'verifying'} aria-label="Choose a landmark photo from photo library" /></div>}</div></div>}
     </section>
   );
 }
@@ -542,6 +554,7 @@ export default function RouteSitePage({ region }) {
         <RouteHero region={region} />
         <RouteStory region={region} />
         <RouteItinerary region={region} />
+        {region.maokongFeature && <MaokongTeaFeature feature={region.maokongFeature} />}
         <RoutePlanner region={region} />
         <RoutePassport region={region} />
         <RouteCTA region={region} />

@@ -1,6 +1,7 @@
 import { createContext, useContext, useMemo, useReducer } from 'react';
 import { BADGES, ITINERARIES } from '../data';
 import { getRegionById, OVERVIEW_ROUTE_ID, REGION_MATRIX } from '../data/itinerary/index.js';
+import { ROUTE_REGISTRY } from '../app/routeRegistry.js';
 
 const formatTaiwanDate = (date = new Date()) => {
   const parts = new Intl.DateTimeFormat('en-US', {
@@ -50,7 +51,7 @@ const initialState = {
 function reducer(state, action) {
   switch (action.type) {
     case 'SET_ACTIVE_ROUTE': {
-      const routeExists = action.value === OVERVIEW_ROUTE_ID || REGION_MATRIX.some((region) => region.id === action.value);
+      const routeExists = ROUTE_REGISTRY.some((route) => route.id === action.value);
       return routeExists
         ? { ...state, activeRouteId: action.value, activeSection: 'top', badges: badgesForRoute(action.value, state.badges, state.verifiedBadges), activeBadgeId: null, isUploadModalOpen: false, uploadState: 'idle', uploadPreviewUrl: '' }
         : state;

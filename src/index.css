@@ -18,6 +18,16 @@ button { cursor: pointer; }
 .section-title { margin-top: 18px; font-family: var(--font-display); font-size: clamp(3rem, 6vw, 6.4rem); line-height: .9; letter-spacing: -.06em; }
 .section-title em { color: #8a3324; font-style: italic; }
 .bicycle-svg { display: block; width: 100%; height: auto; }
+.maokong-steam {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: maokong-steam-rise 4.5s ease-in-out infinite;
+}
+.maokong-steam--two { animation-delay: -2.1s; }
+@keyframes maokong-steam-rise {
+  0%, 100% { opacity: .25; transform: translateY(4px); }
+  50% { opacity: .65; transform: translateY(-5px); }
+}
 ::selection { color: #f5f5f0; background: #2d4030; }
 
 .ambient-background {
@@ -201,6 +211,8 @@ button { cursor: pointer; }
   .ambient-background::before,
   .ambient-background::after,
   .ambient-background__shape { animation: none; }
+  .maokong-steam,
+  .maokong-steam--two { animation: none; }
 }
 
 /* Route-to-route transition: opacity and a restrained horizontal translation only. */

@@ -12,6 +12,15 @@ export const NORTH_COAST_TAIPEI_REGION = {
   storyTitle: 'Coastlines in the morning. City lights by night.',
   storyBody: 'The template finish keeps the final two days legible: sea wind first, then a measured return into the city.',
   visualPreset: 'finish',
+  maokongFeature: {
+    id: 'maokong-tea-finale',
+    day: 13,
+    eyebrow: 'DAY 13 / MAOKONG',
+    title: 'Tea above the city.',
+    body: 'Finish the journey in Maokong with mountain air, slow tea and Taipei lights below.',
+    imageAlt: 'White tea cup and rising steam in Maokong',
+    variant: 'maokong-tea'
+  },
   passportStops: [
     { id: 'north-yeliu', name: 'Yehliu Geopark', place: 'North Coast', regionId: 'north-coast-taipei', day: 12, imageAlt: 'Queen’s Head rock at Yehliu Geopark', status: 'available', color: '#8A3324', icon: '◈' },
     { id: 'north-jinshan', name: 'Jinshan', place: 'North Coast', regionId: 'north-coast-taipei', day: 12, imageAlt: 'Jinshan old street and hot spring town', status: 'available', color: '#1F5149', icon: '✦' },

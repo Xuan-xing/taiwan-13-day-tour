@@ -10,6 +10,16 @@ export const OVERVIEW_ROUTE = {
   dataStatus: 'source-provided'
 };
 
+export const OPERATIONS_ROUTE_ID = 'operations';
+export const OPERATIONS_ROUTE = {
+  id: OPERATIONS_ROUTE_ID,
+  siteNumber: 7,
+  title: 'Route Operations / Feasibility',
+  dayRange: [1, 13],
+  accent: '#8A3324',
+  dataStatus: 'pending'
+};
+
 export const ROUTE_REGISTRY = [
   OVERVIEW_ROUTE,
   ...REGION_MATRIX.map((region) => ({
@@ -19,7 +29,8 @@ export const ROUTE_REGISTRY = [
     dayRange: region.dayRange,
     accent: region.accent,
     dataStatus: region.dataStatus,
-  }))
+  })),
+  OPERATIONS_ROUTE
 ];
 
 export const getRouteById = (routeId) => ROUTE_REGISTRY.find((route) => route.id === routeId);

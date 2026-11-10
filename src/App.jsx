@@ -8,6 +8,7 @@ import KaohsiungPage from './sites/kaohsiung/KaohsiungPage';
 import GreenIslandTaitungPage from './sites/green-island-taitung/GreenIslandTaitungPage';
 import SuAoYilanPage from './sites/su-ao-yilan/SuAoYilanPage';
 import NorthCoastTaipeiPage from './sites/north-coast-taipei/NorthCoastTaipeiPage';
+import RouteOperationsPage from './sites/operations/RouteOperationsPage';
 
 const ROUTE_PAGES = {
   overview: OverviewPage,
@@ -17,6 +18,7 @@ const ROUTE_PAGES = {
   'green-island-taitung': GreenIslandTaitungPage,
   'su-ao-yilan': SuAoYilanPage,
   'north-coast-taipei': NorthCoastTaipeiPage,
+  operations: RouteOperationsPage,
 };
 
 function AppInner() {
