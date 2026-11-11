@@ -10,6 +10,7 @@ export const GREEN_ISLAND_TAITUNG_REGION = {
   storyTitle: 'Blue water, open fields.',
   storyBody: 'The route moves from island water and hot spring steam to balloon skies, rice fields and Taitung nights.',
   visualPreset: 'wild',
+  continuationDayIds: ['day-09'],
   heroImage: '/images/regions/green-island-taitung/green-island-lighthouse.jpg',
   heroImageAlt: 'Green Island Lighthouse and coastline',
   passportStops: [

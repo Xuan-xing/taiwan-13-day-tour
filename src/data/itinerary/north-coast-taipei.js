@@ -19,7 +19,12 @@ export const NORTH_COAST_TAIPEI_REGION = {
     title: 'Tea above the city.',
     body: 'Finish the journey in Maokong with mountain air, slow tea and Taipei lights below.',
     imageAlt: 'White tea cup and rising steam in Maokong',
-    variant: 'maokong-tea'
+    variant: 'maokong-tea',
+    audio: {
+      src: '/audio/ornave-chill-warm-night-594991.mp3',
+      title: 'Maokong chill warm night',
+      type: 'audio/mpeg'
+    }
   },
   passportStops: [
     { id: 'north-yeliu', name: 'Yehliu Geopark', place: 'North Coast', regionId: 'north-coast-taipei', day: 12, imageAlt: 'Queen’s Head rock at Yehliu Geopark', status: 'available', color: '#8A3324', icon: '◈' },
@@ -101,5 +106,3 @@ export const NORTH_COAST_TAIPEI_REGION = {
     }
   ]
 };
-
-

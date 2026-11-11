@@ -19,7 +19,7 @@ export const DAY_COUNT = 13;
 export const ITINERARY_DAYS = REGION_MATRIX.flatMap((region) => region.days);
 export const REGION_ORDER = REGION_MATRIX.map((region) => region.id);
 
-export const JOURNEY_MAP_VIEWBOX = { x: 101.36, y: -2, width: 757.28, height: 964 };
+export const JOURNEY_MAP_VIEWBOX = { x: 450, y: 210, width: 430, height: 760 };
 
 export const JOURNEY_MAP_NODES = [
   { id: 'taichung', routeId: 'taichung', mapPathId: 'TW-TXG', label: 'Taichung', detail: 'Days 1–2', dayRange: [1, 2], kind: 'region', x: 650, y: 470, visibleMarker: true },

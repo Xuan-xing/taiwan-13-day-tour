@@ -96,11 +96,11 @@ export default function TaiwanJourneyMap({ onSelectRoute }) {
   }, []);
 
   return (
-    <div ref={rootRef} className="relative mx-auto w-full max-w-xl overflow-hidden" id="overview-map">
-      <svg viewBox={`${JOURNEY_MAP_VIEWBOX.x} ${JOURNEY_MAP_VIEWBOX.y} ${JOURNEY_MAP_VIEWBOX.width} ${JOURNEY_MAP_VIEWBOX.height}`} role="img" aria-labelledby="journey-map-title journey-map-description" className="block h-auto w-full">
+    <div ref={rootRef} className="relative mx-auto w-full max-w-md overflow-hidden" id="overview-map">
+      <svg viewBox={`${JOURNEY_MAP_VIEWBOX.x} ${JOURNEY_MAP_VIEWBOX.y} ${JOURNEY_MAP_VIEWBOX.width} ${JOURNEY_MAP_VIEWBOX.height}`} role="img" aria-labelledby="journey-map-title journey-map-description" preserveAspectRatio="xMidYMid meet" className="mx-auto block h-auto w-full">
         <title id="journey-map-title">Taiwan 13-day journey route</title>
         <desc id="journey-map-description">A complete regional route from Taichung through Green Island and the east coast to Taipei.</desc>
-        <image href="/images/maps/taiwanHigh.svg" x={JOURNEY_MAP_VIEWBOX.x} y={JOURNEY_MAP_VIEWBOX.y} width={JOURNEY_MAP_VIEWBOX.width} height={JOURNEY_MAP_VIEWBOX.height} preserveAspectRatio="xMidYMid meet" opacity=".32" pointerEvents="none" aria-hidden="true" />
+        <image href="/images/maps/taiwanHigh-overview.svg" x={JOURNEY_MAP_VIEWBOX.x} y={JOURNEY_MAP_VIEWBOX.y} width={JOURNEY_MAP_VIEWBOX.width} height={JOURNEY_MAP_VIEWBOX.height} preserveAspectRatio="xMidYMid meet" opacity=".32" pointerEvents="none" aria-hidden="true" />
         <path d={routePath} ref={routeRef} fill="none" stroke="#8A3324" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" vectorEffect="non-scaling-stroke" />
         <circle ref={routePulseRef} r="5" fill="#D9AA3B" pointerEvents="none" aria-hidden="true" />
         {JOURNEY_MAP_NODES.filter((node) => node.visibleMarker).map((node, index) => {

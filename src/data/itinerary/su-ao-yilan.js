@@ -1,7 +1,7 @@
 export const SU_AO_YILAN_REGION = {
   id: 'su-ao-yilan',
   siteNumber: 5,
-  title: 'East Coast Transfer & Yilan Harbour',
+  title: 'Su-Ao & Yilan — Harbour Days',
   dayRange: [9, 11],
   accent: '#1F5149',
   dataStatus: 'partially-source-provided',
@@ -10,6 +10,7 @@ export const SU_AO_YILAN_REGION = {
   storyTitle: 'Coastline to connection.',
   storyBody: 'Keep the riding segment light and leave space for the rail or shuttle handoff into the next coast.',
   visualPreset: 'transfer',
+  hiddenDayIds: ['day-09'],
   heroImage: '/images/regions/su-ao-yilan/nanfangao-fish-market.jpg',
   heroImageAlt: 'Nanfangao fish market and harbour in Su-Ao',
   passportStops: [
@@ -18,7 +19,17 @@ export const SU_AO_YILAN_REGION = {
     { id: 'suao-harbour', name: 'Su-Ao Harbour', place: 'Su-Ao', regionId: 'su-ao-yilan', day: 10, imageAlt: 'Su-Ao Harbour waterfront', status: 'locked', color: '#C4D4C5', icon: '⚓' },
     { id: 'wushi-guishan', name: 'Wushi Harbor / Guishan Island', place: 'Yilan coast', regionId: 'su-ao-yilan', day: 11, imageAlt: 'Wushi Harbor and Guishan Island', status: 'locked', color: '#C4D4C5', icon: '◒' }
   ],
-  contentNote: 'Day 9 comes from the latest Taitung correction. The uploaded itinerary marked Yilan as pending, so Days 10–11 remain placeholders.',
+  contentNote: 'Days 10–11 remain placeholders while the detailed Yilan itinerary is confirmed.',
+  alternativeCoastFeature: {
+    id: 'neipi-wushi-harbor', eyebrow: 'A TWO-DAY FIELD NOTE',
+    title: 'Beaches in the morning. Harbor culture by afternoon.',
+    body: 'Use the coast as a slower alternative: enjoy Neipi Beach for open sea views, then visit Wushi Harbor to experience Taiwan’s fishing harbor culture.',
+    variant: 'coast-harbor', accent: '#63B6C9',
+    stops: [
+      { id: 'neipi-beach', name: 'Neipi Beach', description: 'A quiet coastal stop for beach views, sea air and a slower shoreline rhythm.', image: '/images/regions/su-ao-yilan/nanfangao-neipi-bay.jpg', imageAlt: 'Neipi Beach and the surrounding coastline' },
+      { id: 'wushi-harbor', name: 'Wushi Harbor', description: 'A harbor stop for fishing boats, working waterfronts and Taiwan coastal culture.', image: '/images/regions/su-ao-yilan/wushi-harbor.jpg', imageAlt: 'Wushi Harbor and Taiwan fishing harbor culture' }
+    ]
+  },
   days: [
     {
       id: 'day-09',

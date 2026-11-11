@@ -16,6 +16,9 @@ import {
 } from 'lucide-react';
 import { useAppState } from '../state/AppState';
 import { JINSHAN_PLANS } from '../data';
+import { ITINERARY_DAYS } from '../data/itinerary/index.js';
+import CoastHarborFeature from '../components/CoastHarborFeature';
+import DayContinuationSection from '../components/DayContinuationSection';
 import AmbientSectionBackground from '../components/AmbientSectionBackground';
 import SectionBikePass from '../components/SectionBikePass';
 import SectionProgress from '../components/SectionProgress';
@@ -171,12 +174,24 @@ function RouteModeToggle() {
   );
 }
 
+
+const DAY_BY_ID = new Map(ITINERARY_DAYS.map((day) => [day.id, day]));
+
+function getDisplayDays(region) {
+  const hiddenDayIds = new Set(region.hiddenDayIds ?? []);
+  return region.days.filter((day) => !hiddenDayIds.has(day.id));
+}
+
+function getContinuationDays(region) {
+  return (region.continuationDayIds ?? []).map((dayId) => DAY_BY_ID.get(dayId)).filter(Boolean);
+}
 function RouteHero({ region }) {
-  const firstDay = region.days[0];
+  const displayDays = getDisplayDays(region);
+  const firstDay = displayDays[0] ?? region.days[0];
   const [lead, detail] = region.title.split(' — ');
   const image = region.heroImage ?? firstDay?.image;
   const heroEyebrow = region.heroEyebrow ?? lead;
-  const heroSummary = region.heroSummary ?? region.days.map((day) => day.route).join(' · ');
+  const heroSummary = region.heroSummary ?? displayDays.map((day) => day.route).join(' · ');
   const visual = VISUAL_PRESETS[region.visualPreset] ?? VISUAL_PRESETS.finish;
 
   return (
@@ -193,7 +208,7 @@ function RouteHero({ region }) {
             {detail ? <>{detail}<br /><em style={{ color: region.accent }}>{firstDay?.title}</em></> : firstDay?.title}
           </h1>
           <p className="mt-8 max-w-xl text-base leading-7 text-ink/65 sm:text-lg">{heroSummary}</p>
-          <p className="mt-4 max-w-xl text-xs font-semibold leading-5 text-ink/45">{region.days.map((day) => day.route).join(' · ')}</p>
+          <p className="mt-4 max-w-xl text-xs font-semibold leading-5 text-ink/45">{displayDays.map((day) => day.route).join(' · ')}</p>
           <div className="mt-9 flex flex-wrap items-center gap-5">
             <a href="#itinerary" className="group inline-flex min-h-11 items-center gap-3 rounded-full bg-ink px-5 py-3 text-sm font-semibold text-rice transition active:scale-[.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta focus-visible:ring-offset-2 focus-visible:ring-offset-rice">
               Explore the route <ArrowDownRight size={16} aria-hidden="true" className="transition group-hover:rotate-45" />
@@ -222,6 +237,7 @@ function RouteHero({ region }) {
 }
 
 function RouteStory({ region }) {
+  const displayDays = getDisplayDays(region);
   const visual = VISUAL_PRESETS[region.visualPreset] ?? VISUAL_PRESETS.finish;
   return (
     <section id="journey" className={`relative scroll-mt-24 overflow-hidden px-4 py-16 sm:px-8 sm:py-24 ${visual.storySection}`}>
@@ -237,7 +253,7 @@ function RouteStory({ region }) {
         </div>
         <div className="flex items-center gap-4 border-t border-ink/10 pt-5 text-xs text-ink/45">
           <span className="h-px w-12 bg-terracotta" />
-          {region.days.map((day) => `Day ${day.day}: ${day.route}`).join('  ·  ')}
+          {displayDays.map((day) => `Day ${day.day}: ${day.route}`).join('  ·  ')}
         </div>
       </div>
     </section>
@@ -302,8 +318,9 @@ function JinshanPlans() {
 }
 
 function RouteItinerary({ region }) {
+  const displayDays = getDisplayDays(region);
   const visual = VISUAL_PRESETS[region.visualPreset] ?? VISUAL_PRESETS.finish;
-  const modeDay = region.days.find((day) => day.modeOptions);
+  const modeDay = displayDays.find((day) => day.modeOptions);
   const [mode, setMode] = useState('pro');
   const selectedMode = modeDay?.modeOptions?.[mode];
 
@@ -314,14 +331,14 @@ function RouteItinerary({ region }) {
       <div className="relative z-10 mx-auto max-w-7xl">
         <div className="mb-12 grid gap-7 border-b border-ink/15 pb-9 lg:grid-cols-[1fr_.45fr] lg:items-end">
           <div>
-            <p className="section-kicker">A {region.days.length}-day field note</p>
+            <p className="section-kicker">A {displayDays.length}-day field note</p>
             <h2 className="section-title">Read the road.<br /><em>Choose your rhythm.</em></h2>
           </div>
           <p className="max-w-sm text-sm leading-6 text-ink/60">Every card is driven by the regional itinerary data. Transport notes remain practical planning references until verified.</p>
         </div>
 
         <div className={`grid items-stretch gap-6 ${visual.itineraryGrid}`}>
-          {region.days.map((day) => {
+          {displayDays.map((day) => {
             const isPending = day.verificationStatus === 'pending-user-data';
             const modeDetails = day.modeOptions ? selectedMode : null;
             const elevation = modeDetails?.elevationM ?? day.elevationM;
@@ -384,11 +401,12 @@ function RouteItinerary({ region }) {
 }
 
 function RoutePlanner({ region }) {
+  const displayDays = getDisplayDays(region);
   const visual = VISUAL_PRESETS[region.visualPreset] ?? VISUAL_PRESETS.finish;
-  const [selectedDayId, setSelectedDayId] = useState(region.days[0]?.id);
+  const [selectedDayId, setSelectedDayId] = useState(displayDays[0]?.id);
   const [style, setStyle] = useState('road');
   const [pace, setPace] = useState('steady');
-  const selectedDay = useMemo(() => region.days.find((day) => day.id === selectedDayId) ?? region.days[0], [region.days, selectedDayId]);
+  const selectedDay = useMemo(() => displayDays.find((day) => day.id === selectedDayId) ?? displayDays[0], [displayDays, selectedDayId]);
 
   return (
     <section id="planner" className={`relative scroll-mt-24 overflow-hidden px-4 py-20 sm:px-8 sm:py-28 ${visual.plannerSection}`}>
@@ -414,7 +432,7 @@ function RoutePlanner({ region }) {
           <div className="border border-ink/10 bg-rice p-5 sm:p-7">
             <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-[.2em] text-ink/45"><Clock3 size={15} aria-hidden="true" /> Select a day</div>
             <div className="mt-5 space-y-2">
-              {region.days.map((day) => <button key={day.id} type="button" onClick={() => setSelectedDayId(day.id)} aria-pressed={selectedDay?.id === day.id} className={`flex min-h-11 w-full items-center justify-between border-b border-ink/10 px-2 py-3 text-left text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta ${selectedDay?.id === day.id ? 'font-semibold text-ink' : 'text-ink/55'}`}><span>Day {String(day.day).padStart(2, '0')} · {day.title}</span><ChevronRight size={15} aria-hidden="true" /></button>)}
+              {displayDays.map((day) => <button key={day.id} type="button" onClick={() => setSelectedDayId(day.id)} aria-pressed={selectedDay?.id === day.id} className={`flex min-h-11 w-full items-center justify-between border-b border-ink/10 px-2 py-3 text-left text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta ${selectedDay?.id === day.id ? 'font-semibold text-ink' : 'text-ink/55'}`}><span>Day {String(day.day).padStart(2, '0')} · {day.title}</span><ChevronRight size={15} aria-hidden="true" /></button>)}
             </div>
           </div>
           <div className="border border-ink/10 bg-rice p-5 sm:p-7">
@@ -546,6 +564,7 @@ function RouteCTA({ region }) {
 
 export default function RouteSitePage({ region }) {
   if (!region) return null;
+  const continuationDays = getContinuationDays(region);
   return (
     <>
       <SiteHeader />
@@ -553,6 +572,8 @@ export default function RouteSitePage({ region }) {
       <main>
         <RouteHero region={region} />
         <RouteStory region={region} />
+        {continuationDays.length > 0 && <DayContinuationSection days={continuationDays} accent={region.accent} />}
+        {region.alternativeCoastFeature && <CoastHarborFeature feature={region.alternativeCoastFeature} />}
         <RouteItinerary region={region} />
         {region.maokongFeature && <MaokongTeaFeature feature={region.maokongFeature} />}
         <RoutePlanner region={region} />
@@ -563,5 +584,3 @@ export default function RouteSitePage({ region }) {
     </>
   );
 }
-
-
