@@ -1,3 +1,5 @@
+import { DAY_ROUTE_MEASUREMENTS } from './routeMeasurements.js';
+
 export const TAICHUNG_REGION = {
   id: 'taichung',
   siteNumber: 1,
@@ -46,7 +48,8 @@ export const TAICHUNG_REGION = {
       verificationNotes: [
         'Distances are segment estimates from the uploaded text, not a verified GPX total.',
         'Bike parking, rental and opening times remain unverified.'
-      ]
+      ],
+      ...DAY_ROUTE_MEASUREMENTS['day-01']
     },
     {
       id: 'day-02',
@@ -74,7 +77,8 @@ export const TAICHUNG_REGION = {
       verificationStatus: 'source-provided',
       verificationNotes: [
         'Full route distance and riding time were not included in the source text.'
-      ]
+      ],
+      ...DAY_ROUTE_MEASUREMENTS['day-02']
     }
   ]
 };

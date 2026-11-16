@@ -255,11 +255,11 @@ button { cursor: pointer; }
 .journey-map-node:focus-visible > circle:first-of-type { stroke: #8a3324; stroke-width: 4; }
 
 .route-transition-overlay { contain: layout paint; }
-.transition-bike { display: block; width: clamp(64px, 10vw, 132px); height: auto; }
+.transition-bike { display: block; width: clamp(82px, 12vw, 168px); height: auto; }
 .journey-map-node:focus-visible { outline: none; }
 .journey-map-node:focus-visible > circle:first-of-type { stroke: #8a3324; stroke-width: 4; }
 @media (max-width: 640px) {
-  .transition-bike { width: 18vw; min-width: 0; max-width: 92px; }
+  .transition-bike { width: 24vw; min-width: 0; max-width: 116px; }
 }
 @media (prefers-reduced-motion: reduce) {
   .transition-bike__wheel,
@@ -414,6 +414,41 @@ button { cursor: pointer; }
 
 @media (prefers-reduced-motion: reduce) {
   .maokong-room__floor-lines-group { animation: none; }
+}
+
+
+
+.route-transition-overlay__panel {
+  background: #e88918;
+  isolation: isolate;
+}
+
+.route-transition-landmark {
+  line-height: 0;
+  max-height: 78vh;
+}
+
+.route-transition-landmark img {
+  max-height: 78vh;
+  object-fit: contain;
+  object-position: bottom center;
+}
+
+@media (max-width: 640px) {
+  .route-transition-landmark {
+    width: 92% !important;
+    max-height: 64vh;
+  }
+
+  .route-transition-landmark img {
+    max-height: 64vh;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .route-transition-landmark {
+    transition: opacity 80ms linear;
+  }
 }
 
 

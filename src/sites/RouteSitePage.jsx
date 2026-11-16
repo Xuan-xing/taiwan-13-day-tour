@@ -107,6 +107,49 @@ function formatValue(value, fallback = '—') {
   return value;
 }
 
+const MEASUREMENT_STATUS_LABELS = {
+  verified: 'Verified',
+  'source-provided': 'Source-provided',
+  estimated: 'Estimated',
+  'needs-confirmation': 'Needs confirmation',
+  pending: 'Pending measurement',
+  'not-recorded': 'Not recorded'
+};
+
+function measurementStatusLabel(status) {
+  return MEASUREMENT_STATUS_LABELS[status] ?? MEASUREMENT_STATUS_LABELS['not-recorded'];
+}
+
+function MeasurementEvidence({ day }) {
+  const source = day.distanceSource;
+  const hasBreakdown = day.routeBreakdown?.length > 0;
+  if (!source && !hasBreakdown && !day.notes) return null;
+  return (
+    <div className="mt-4 border-t border-ink/10 pt-4 text-xs leading-5 text-ink/60">
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <span className="font-bold uppercase tracking-[.16em] text-ink/45">Measurement</span>
+        <span className="rounded-full border border-ink/15 px-2.5 py-1 font-semibold text-ink">{measurementStatusLabel(day.measurementStatus)}</span>
+      </div>
+      {day.notes && <p className="mt-2 max-w-2xl">{day.notes}</p>}
+      {(hasBreakdown || source) && (
+        <details className="mt-3">
+          <summary className="inline-flex min-h-11 cursor-pointer items-center rounded-full border border-ink/15 px-3 py-2 font-semibold text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta">View route details &amp; sources</summary>
+          {hasBreakdown && <ul className="mt-3 space-y-2 border-l-2 border-ink/10 pl-3">
+            {day.routeBreakdown.map((segment) => <li key={segment.segment}><span className="font-semibold text-ink">{segment.segment}</span><span className="block">{segment.distanceKm == null ? 'Pending distance' : `${segment.distanceKm} km`} · {segment.elevationGainM == null ? 'Pending elevation' : `${segment.elevationGainM} m ascent`} · {segment.includedInRideDistance === false ? 'Excluded from cycling distance' : measurementStatusLabel(segment.status)}</span>{segment.sourceUrl && <a href={segment.sourceUrl} target="_blank" rel="noreferrer" className="mt-1 inline-flex min-h-11 items-center font-semibold text-ink underline decoration-terracotta underline-offset-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta" aria-label={`View route source for ${segment.segment}`}>View route source</a>}</li>)}
+          </ul>}
+          {source && <div className="mt-4 border-l-2 border-terracotta pl-3">
+            <p className="font-semibold text-ink">{source.sourceTitle}</p>
+            <p>{source.sourceType} · Checked {source.checkedAt}</p>
+            <p className="mt-1">{source.measurementMethod}</p>
+            <p className="mt-1">Limitation: {source.limitations}</p>
+          </div>}
+          <p className="mt-3">Elevation source: {day.elevationSource?.sourceTitle ?? 'Pending measurement'}</p>
+        </details>
+      )}
+    </div>
+  );
+}
+
 function SiteHeader() {
   const { dispatch } = useAppState();
   const [open, setOpen] = useState(false);
@@ -341,7 +384,9 @@ function RouteItinerary({ region }) {
           {displayDays.map((day) => {
             const isPending = day.verificationStatus === 'pending-user-data';
             const modeDetails = day.modeOptions ? selectedMode : null;
-            const elevation = modeDetails?.elevationM ?? day.elevationM;
+            const elevation = modeDetails?.elevationM ?? day.elevationGainM ?? day.elevationM;
+            const distanceStatus = day.distanceStatus ?? (day.measurementStatus ?? 'not-recorded');
+            const elevationStatus = day.elevationStatus ?? (day.measurementStatus ?? 'not-recorded');
             return (
               <article key={day.id} className="flex h-full flex-col overflow-hidden border border-ink/15 bg-rice">
                 <RouteImage day={day} />
@@ -359,10 +404,15 @@ function RouteItinerary({ region }) {
                     </div>
                   )}
                   <div className="mt-7 grid grid-cols-3 gap-4 border-y border-ink/15 py-5">
-                    <Stat label="Distance" value={day.distanceKm ? `${day.distanceKm} km` : 'Pending'} />
-                    <Stat label="Elevation" value={elevation ? `${elevation} m` : 'Pending'} />
+                    <Stat label="Distance" value={day.distanceKm == null ? 'Pending measurement' : `${day.distanceKm} km`} />
+                    <Stat label="Elevation gain" value={elevation == null ? 'Pending measurement' : `${elevation} m`} />
                     <Stat label="Ride time" value={day.estimatedRideTime} />
                   </div>
+                  <div className="mt-4 grid gap-2 text-[10px] font-bold uppercase tracking-[.14em] text-ink/45 sm:grid-cols-2">
+                    <span>Distance: {measurementStatusLabel(distanceStatus)}</span>
+                    <span>Elevation: {measurementStatusLabel(elevationStatus)}</span>
+                  </div>
+                  <MeasurementEvidence day={day} />
                   {modeDetails && (
                     <div className="mt-6 border-l-2 border-terracotta pl-4">
                       <p className="text-[10px] font-bold uppercase tracking-[.18em] text-terracotta">{modeDetails.tag}</p>
@@ -556,7 +606,7 @@ function RouteCTA({ region }) {
     <section id="cta" className="relative scroll-mt-24 overflow-hidden bg-terracotta px-4 py-20 text-rice sm:px-8 sm:py-24">
       <AmbientSectionBackground variant="terracotta-glow" />
       <SectionBikePass direction={region.siteNumber % 2 === 0 ? 'ltr' : 'rtl'} className="top-24 sm:top-32" />
-      <div className="relative z-10 mx-auto flex max-w-7xl flex-col justify-between gap-12 md:flex-row md:items-end"><div><p className="mb-5 text-xs font-bold uppercase tracking-[.28em] text-rice/60">Your next good turn</p><h2 className="max-w-3xl font-display text-[clamp(3.3rem,7vw,7rem)] leading-[.88] tracking-[-.07em]">Take the long way<br /><em>home.</em></h2></div><div className="flex max-w-xs flex-col gap-3"><button type="button" onClick={download} className="flex min-h-11 items-center justify-between rounded-full bg-rice px-5 py-4 text-left text-sm font-semibold text-terracotta focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rice">Download GPX route <span className="ml-3 text-[10px] font-bold uppercase tracking-[.12em] text-terracotta/60">Demo</span><Download size={18} aria-hidden="true" /></button><a href="mailto:hello@taiwan-two-worlds.travel" className="flex min-h-11 items-center justify-between rounded-full border border-rice/30 px-5 py-4 text-sm font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rice">Book a local transfer <ArrowUpRight size={18} aria-hidden="true" /></a><p className="px-2 pt-2 text-xs leading-5 text-rice/60">GPX export is a demo. The route is based on source-provided planning data and still needs final transport verification.</p></div></div>
+      <div className="relative z-10 mx-auto flex max-w-7xl flex-col justify-between gap-12 md:flex-row md:items-end"><div><p className="mb-5 text-xs font-bold uppercase tracking-[.28em] text-rice/60">Your next good turn</p><h2 className="max-w-3xl font-display text-[clamp(3.3rem,7vw,7rem)] leading-[.88] tracking-[-.07em]">Take the long way<br /><em>home.</em></h2></div><div className="flex max-w-xs flex-col gap-3"><button type="button" onClick={download} className="flex min-h-11 items-center justify-between rounded-full bg-rice px-5 py-4 text-left text-sm font-semibold text-terracotta focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rice">Download GPX route <span className="ml-3 text-[10px] font-bold uppercase tracking-[.12em] text-terracotta/60">Demo</span><Download size={18} aria-hidden="true" /></button><div className="flex min-h-11 items-center justify-between rounded-full border border-rice/30 px-5 py-4 text-sm font-semibold text-rice/75" aria-label="Local transfer contact pending">Book a local transfer <span className="ml-3 text-[10px] font-bold uppercase tracking-[.12em] text-rice/55">Pending</span></div><p className="px-2 pt-2 text-xs leading-5 text-rice/60">GPX export is a demo. The route is based on source-provided planning data and still needs final transport verification.</p></div></div>
       {state.toast && <div role="status" aria-live="polite" className="fixed bottom-5 left-1/2 z-50 -translate-x-1/2 rounded-full bg-ink px-5 py-3 text-xs font-semibold text-rice">{state.toast}</div>}
     </section>
   );

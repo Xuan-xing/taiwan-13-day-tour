@@ -1,3 +1,5 @@
+import { DAY_ROUTE_MEASUREMENTS } from './routeMeasurements.js';
+
 export const GREEN_ISLAND_TAITUNG_REGION = {
   id: 'green-island-taitung',
   siteNumber: 4,
@@ -49,7 +51,8 @@ export const GREEN_ISLAND_TAITUNG_REGION = {
       verificationStatus: 'source-provided',
       verificationNotes: [
         'Ferry timetable, sea conditions, bicycle carriage and water activity operators require verification.'
-      ]
+      ],
+      ...DAY_ROUTE_MEASUREMENTS['day-07']
     },
     {
       id: 'day-08',
@@ -78,7 +81,8 @@ export const GREEN_ISLAND_TAITUNG_REGION = {
       verificationStatus: 'source-provided',
       verificationNotes: [
         'Ferry return time, balloon schedule and bike logistics between Luye and Taitung require verification.'
-      ]
+      ],
+      ...DAY_ROUTE_MEASUREMENTS['day-08']
     }
   ]
 };

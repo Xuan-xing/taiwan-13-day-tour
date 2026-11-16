@@ -1,4 +1,4 @@
-import { createContext, useContext, useMemo, useReducer } from 'react';
+import { createContext, useContext, useEffect, useMemo, useReducer } from 'react';
 import { BADGES, ITINERARIES } from '../data';
 import { getRegionById, OVERVIEW_ROUTE_ID, REGION_MATRIX } from '../data/itinerary/index.js';
 import { ROUTE_REGISTRY } from '../app/routeRegistry.js';
@@ -32,21 +32,34 @@ const badgesForRoute = (routeId, previousBadges = [], verifiedBadges = {}) => {
 };
 
 const initialRouteId = OVERVIEW_ROUTE_ID;
-const initialState = {
+const PASSPORT_STORAGE_KEY = 'taiwan-bike-tour:verified-badges';
+
+function readPersistedVerifiedBadges() {
+  if (typeof window === 'undefined') return {};
+  try {
+    const stored = window.localStorage.getItem(PASSPORT_STORAGE_KEY);
+    const parsed = stored ? JSON.parse(stored) : {};
+    return parsed && typeof parsed === 'object' && !Array.isArray(parsed) ? parsed : {};
+  } catch {
+    return {};
+  }
+}
+
+const createInitialState = (verifiedBadges = {}) => ({
   routeMode: 'art',
   activeRouteId: initialRouteId,
   ridingStyle: 'road',
   pace: 'steady',
   selectedItineraryId: 'art-01',
   activeSection: 'top',
-  badges: badgesForRoute(initialRouteId),
-  verifiedBadges: {},
+  badges: badgesForRoute(initialRouteId, [], verifiedBadges),
+  verifiedBadges,
   activeBadgeId: null,
   isUploadModalOpen: false,
   uploadState: 'idle',
   uploadPreviewUrl: '',
   toast: '',
-};
+});
 
 function reducer(state, action) {
   switch (action.type) {
@@ -100,7 +113,14 @@ function reducer(state, action) {
 const AppStateContext = createContext(null);
 
 export function AppStateProvider({ children }) {
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const [state, dispatch] = useReducer(reducer, undefined, () => createInitialState(readPersistedVerifiedBadges()));
+  useEffect(() => {
+    try {
+      window.localStorage.setItem(PASSPORT_STORAGE_KEY, JSON.stringify(state.verifiedBadges));
+    } catch {
+      // Storage can be unavailable in private browsing; the in-memory flow still works.
+    }
+  }, [state.verifiedBadges]);
   const value = useMemo(() => ({ state, dispatch }), [state]);
   return <AppStateContext.Provider value={value}>{children}</AppStateContext.Provider>;
 }

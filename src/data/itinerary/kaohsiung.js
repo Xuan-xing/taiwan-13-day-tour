@@ -1,3 +1,5 @@
+import { DAY_ROUTE_MEASUREMENTS } from './routeMeasurements.js';
+
 export const KAOHSIUNG_REGION = {
   id: 'kaohsiung',
   siteNumber: 3,
@@ -47,7 +49,8 @@ export const KAOHSIUNG_REGION = {
       verificationNotes: [
         'Meinong transfer and bike rental details are not yet verified.',
         'Pier-2 event and lighting schedules require confirmation.'
-      ]
+      ],
+      ...DAY_ROUTE_MEASUREMENTS['day-05']
     },
     {
       id: 'day-06',
@@ -82,7 +85,8 @@ export const KAOHSIUNG_REGION = {
       verificationStatus: 'source-provided',
       verificationNotes: [
         'Ferry timetable, bicycle carriage and Qijin rental availability remain unverified.'
-      ]
+      ],
+      ...DAY_ROUTE_MEASUREMENTS['day-06']
     }
   ]
 };

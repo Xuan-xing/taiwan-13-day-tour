@@ -1,3 +1,5 @@
+import { DAY_ROUTE_MEASUREMENTS } from './routeMeasurements.js';
+
 export const SU_AO_YILAN_REGION = {
   id: 'su-ao-yilan',
   siteNumber: 5,
@@ -19,7 +21,7 @@ export const SU_AO_YILAN_REGION = {
     { id: 'suao-harbour', name: 'Su-Ao Harbour', place: 'Su-Ao', regionId: 'su-ao-yilan', day: 10, imageAlt: 'Su-Ao Harbour waterfront', status: 'locked', color: '#C4D4C5', icon: '⚓' },
     { id: 'wushi-guishan', name: 'Wushi Harbor / Guishan Island', place: 'Yilan coast', regionId: 'su-ao-yilan', day: 11, imageAlt: 'Wushi Harbor and Guishan Island', status: 'locked', color: '#C4D4C5', icon: '◒' }
   ],
-  contentNote: 'Days 10–11 remain placeholders while the detailed Yilan itinerary is confirmed.',
+  contentNote: 'Days 10–11 now use official regional references for Su-Ao, Wushi Harbor and Guishan Island. Exact timings, boat operator and reservations still require route-level confirmation.',
   alternativeCoastFeature: {
     id: 'neipi-wushi-harbor', eyebrow: 'A TWO-DAY FIELD NOTE',
     title: 'Beaches in the morning. Harbor culture by afternoon.',
@@ -57,54 +59,103 @@ export const SU_AO_YILAN_REGION = {
       verificationStatus: 'source-provided',
       verificationNotes: [
         'The route direction is user-provided, but exact rail station, departure time, bike rules and shuttle operator are unverified.'
-      ]
+      ],
+      ...DAY_ROUTE_MEASUREMENTS['day-09']
     },
     {
       id: 'day-10',
       day: 10,
-      title: 'Su-Ao Harbour Day',
-      route: 'Su-Ao — itinerary details pending',
+      title: 'Su-Ao Harbour, Cold Springs & North Link',
+      route: 'Su-Ao Harbour → Su-Ao Cold Spring → Su-Ao / Nanfangao waterfront',
       distanceKm: null,
-      distanceNote: 'Yilan content was marked as pending in the uploaded itinerary.',
+      distanceNote: 'Official regional references are available, but the final riding distance still needs route measurement.',
       estimatedRideTime: null,
       elevationM: null,
-      highlights: [],
-      plannerNote: 'Awaiting the detailed Su-Ao plan before layout and timing are finalized.',
-      seasonalNote: 'Awaiting seasonal guidance.',
-      luggageTransfer: 'Awaiting luggage plan.',
-      bikeRental: 'Awaiting bike rental or bike storage plan.',
-      transitConnection: 'Awaiting local connection details.',
-      transportPlan: 'Placeholder only; no transport should be presented as confirmed.',
-      nextConnection: 'Day 11 is reserved for Wushi Harbor and Guishan Island once details are supplied.',
+      highlights: [
+        'Use Su-Ao as a harbour base at the start of the Suhua and North Link corridor.',
+        'Consider Su-Ao Cold Spring and the waterfront as low-pressure local stops.',
+        'Confirm the final riding distance, access roads, opening hours and bicycle parking before publishing the day.'
+      ],
+      plannerNote: 'This day is now an official-region reference plan; confirm exact attractions, opening hours, accommodation and cycling access before booking.',
+      seasonalNote: 'Check coastal weather and any road or rail disruption notices before riding.',
+      luggageTransfer: 'Confirm hotel storage or a transfer from the Day 9 arrival point before the harbour loop.',
+      bikeRental: 'No Su-Ao rental or return provider has been verified for this itinerary.',
+      transitConnection: 'Su-Ao is served by the North Link rail corridor; the selected train and bicycle handling remain unconfirmed.',
+      transportPlan: 'Keep the day local around Su-Ao and Nanfangao until the exact route and bike plan are confirmed.',
+      nextConnection: 'Day 11 continues to Wushi Harbor, with Guishan Island kept as an application-dependent option.',
       image: '/images/regions/su-ao-yilan/suao-cold-spring-park.jpg',
       imageAlt: 'Su-Ao Cold Spring Park',
-      verificationStatus: 'pending-user-data',
-      verificationNotes: ['Detailed Su-Ao itinerary has not yet been provided.']
+      verificationStatus: 'partially-source-provided',
+      verificationNotes: [
+        'The official regional page confirms Su-Ao as a harbour town with Su-Ao Harbour, Nanfangao and Su-Ao Cold Spring references.',
+        'Exact day schedule, distance, opening hours, accommodation and bicycle logistics remain unverified.'
+      ],
+      sources: [
+        {
+          sourceTitle: 'Northeast and Yilan Coast National Scenic Area: Su-Ao',
+          sourceUrl: 'https://www.necoast-nsa.gov.tw/Area-Content.aspx?a=164&l=1',
+          sourceType: 'official national scenic area',
+          checkedAt: '2026-11-17',
+          quote: 'Su-Ao is the starting point of the Suhua Highway and the North Link railway, with access to Su-Ao Cold Spring Park and Nanfangao Fishing Harbor.',
+          conditions: 'This confirms regional attractions and transport context, not an itinerary booking or opening-time guarantee.',
+          routeSpecificLimitations: 'Exact Day 10 stops, cycling access, parking, accommodation and train remain unconfirmed.',
+          notes: 'Use as a regional planning reference only.'
+        }
+      ],
+      ...DAY_ROUTE_MEASUREMENTS['day-10']
     },
     {
       id: 'day-11',
       day: 11,
       title: 'Wushi Harbor & Guishan Island',
-      route: 'Wushi Harbor → Guishan Island — itinerary details pending',
+      route: 'Wushi Harbor → Guishan Island (official application required)',
       distanceKm: null,
-      distanceNote: 'Yilan content was marked as pending in the uploaded itinerary.',
+      distanceNote: 'Wushi Harbor and Guishan Island are official regional references; boat timing and route distance still need confirmation.',
       estimatedRideTime: null,
       elevationM: null,
-      highlights: [],
-      plannerNote: 'Awaiting the detailed Wushi Harbor and Guishan Island plan before layout and timing are finalized.',
-      seasonalNote: 'Boat access and sea conditions need a dedicated seasonal note.',
-      luggageTransfer: 'Awaiting luggage plan.',
-      bikeRental: 'Awaiting bike rental or bike storage plan.',
-      transitConnection: 'Boat timetable, port access and bicycle storage require confirmation.',
-      transportPlan: 'Placeholder only; do not present boat access or island landing as confirmed.',
+      highlights: [
+        'Visit Wushi Harbor for its fishing-port, seafood-market and coastal history context.',
+        'Treat Guishan Island as a separate boat and permit activity, not as a self-guided bicycle stop.',
+        'Check the official island application, sea conditions and operator schedule before committing the day.'
+      ],
+      plannerNote: 'Guishan Island requires a separate application and boat plan; keep Wushi Harbor as the land-based fallback.',
+      seasonalNote: 'Long-wave warnings, weather and official landing notices can change the island plan.',
+      luggageTransfer: 'Confirm where luggage stays while visiting Wushi Harbor or boarding an island boat.',
+      bikeRental: 'No verified A-to-B rental or Wushi Harbor bicycle provider is recorded.',
+      transitConnection: 'Boat operator, boarding time, landing permission and bicycle storage remain unconfirmed.',
+      transportPlan: 'Plan Wushi Harbor independently and add Guishan Island only after the official application and boat space are confirmed.',
       nextConnection: 'Day 12 begins the North Coast and Jiufen route.',
       image: '/images/regions/su-ao-yilan/guishan-island.jpg',
       imageAlt: 'Guishan Island viewed from Wushi Harbor',
-      verificationStatus: 'pending-user-data',
+      verificationStatus: 'partially-source-provided',
       verificationNotes: [
-        'Detailed Wushi Harbor and Guishan Island itinerary has not yet been provided.',
-        'Boat schedule, sea conditions and landing rules require verification.'
-      ]
+        'The official regional page describes Wushi Harbor as a restored tourist fishing harbour with a fish market and yacht harbour.',
+        'The official Guishan Island portal provides an application process and current landing notices.',
+        'Boat schedule, sea conditions, landing permission, bicycle storage and exact timing require route-level confirmation.'
+      ],
+      sources: [
+        {
+          sourceTitle: 'Northeast and Yilan Coast National Scenic Area: Wushi Harbor',
+          sourceUrl: 'https://www.necoast-nsa.gov.tw/Area-Content.aspx?a=3671&l=1',
+          sourceType: 'official national scenic area',
+          checkedAt: '2026-11-17',
+          quote: 'Wushi Harbor is a popular leisure fishing harbor with a visitor fish market and a yacht harbor.',
+          conditions: 'This confirms the harbour and visitor facilities, not a specific boat booking.',
+          routeSpecificLimitations: 'Exact harbour activities, bicycle parking and boat schedule remain unconfirmed.',
+          notes: 'Use Wushi Harbor as the land-based fallback if island access is unavailable.'
+        },
+        {
+          sourceTitle: 'Guishan Island landing application: Northeast and Yilan Coast National Scenic Area',
+          sourceUrl: 'https://events.necoast-nsa.gov.tw/coast/',
+          sourceType: 'official national scenic area',
+          checkedAt: '2026-11-17',
+          quote: 'The official portal provides a Guishan Island landing application and current landing notices.',
+          conditions: 'The portal provides application, landing notices, weather and long-wave information; a future trip still needs a fresh check.',
+          routeSpecificLimitations: 'No specific boat operator, departure time, landing quota or bicycle carriage is confirmed for this itinerary.',
+          notes: 'Do not treat the current landing notice as a future booking confirmation.'
+        }
+      ],
+      ...DAY_ROUTE_MEASUREMENTS['day-11']
     }
   ]
 };

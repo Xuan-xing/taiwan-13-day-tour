@@ -1,3 +1,5 @@
+import { DAY_ROUTE_MEASUREMENTS } from './routeMeasurements.js';
+
 export const TAINAN_REGION = {
   id: 'tainan',
   siteNumber: 2,
@@ -46,7 +48,8 @@ export const TAINAN_REGION = {
       verificationStatus: 'source-provided',
       verificationNotes: [
         'YouBike availability, parking and museum opening hours are not yet verified.'
-      ]
+      ],
+      ...DAY_ROUTE_MEASUREMENTS['day-03']
     },
     {
       id: 'day-04',
@@ -75,7 +78,8 @@ export const TAINAN_REGION = {
       verificationStatus: 'source-provided',
       verificationNotes: [
         'Exact route distance, bridge access and bike parking remain unverified.'
-      ]
+      ],
+      ...DAY_ROUTE_MEASUREMENTS['day-04']
     }
   ]
 };
