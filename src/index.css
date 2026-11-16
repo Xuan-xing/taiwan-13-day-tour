@@ -14,6 +14,37 @@ html { scroll-behavior: smooth; }
 body { margin: 0; min-width: 320px; }
 button, a { -webkit-tap-highlight-color: transparent; }
 button { cursor: pointer; }
+.passport-modal-dialog {
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;
+}
+.route-passport-file-input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  border: 0;
+  opacity: 0;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+}
+.route-passport-picker-label[aria-disabled='true'] {
+  cursor: not-allowed;
+  opacity: .5;
+}
+.passport-modal-backdrop {
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+@media (min-width: 768px) {
+  .passport-modal-backdrop {
+    -webkit-backdrop-filter: blur(4px);
+    backdrop-filter: blur(4px);
+  }
+}
 .section-kicker { font-size: 10px; font-weight: 700; letter-spacing: .24em; text-transform: uppercase; color: rgba(45,64,48,.48); }
 .section-title { margin-top: 18px; font-family: var(--font-display); font-size: clamp(3rem, 6vw, 6.4rem); line-height: .9; letter-spacing: -.06em; }
 .section-title em { color: #8a3324; font-style: italic; }
