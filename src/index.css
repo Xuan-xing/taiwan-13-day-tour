@@ -38,6 +38,8 @@ button { cursor: pointer; }
 .passport-modal-backdrop {
   -webkit-backdrop-filter: none;
   backdrop-filter: none;
+  overflow-y: auto;
+  overscroll-behavior: contain;
 }
 @media (min-width: 768px) {
   .passport-modal-backdrop {
