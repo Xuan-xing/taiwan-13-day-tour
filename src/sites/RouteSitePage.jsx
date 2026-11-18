@@ -537,14 +537,8 @@ function RoutePassport({ region }) {
   const lockPage = () => {
     const body = document.body;
     const lock = bodyLockRef.current;
-    const scrollY = lock?.scrollY ?? window.scrollY;
+    if (!lock) return;
     body.style.overflow = 'hidden';
-    body.style.position = 'fixed';
-    body.style.top = `-${scrollY}px`;
-    body.style.left = '0';
-    body.style.right = '0';
-    body.style.width = '100%';
-    body.style.touchAction = 'none';
   };
 
   const unlockPage = ({ restoreScroll = true } = {}) => {
