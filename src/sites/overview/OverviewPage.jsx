@@ -4,6 +4,69 @@ import { REGION_MATRIX, ITINERARY_DAYS, DAY_COUNT } from '../../data/itinerary/i
 import AmbientSectionBackground from '../../components/AmbientSectionBackground';
 import TaiwanJourneyMap from '../../components/TaiwanJourneyMap';
 
+const STATUS_LABELS = {
+  verified: 'Verified',
+  'source-provided': 'Source-provided',
+  estimated: 'Estimated',
+  'needs-confirmation': 'Needs confirmation',
+  pending: 'Pending measurement',
+  'conflicting-information': 'Conflicting information'
+};
+
+const STATUS_PRIORITY = {
+  verified: 0,
+  'source-provided': 1,
+  estimated: 2,
+  'needs-confirmation': 3,
+  'conflicting-information': 4,
+  pending: 5
+};
+
+function combinedStatus(statuses) {
+  return [...statuses].sort((a, b) => (STATUS_PRIORITY[b] ?? 5) - (STATUS_PRIORITY[a] ?? 5))[0] ?? 'pending';
+}
+
+function getKaohsiungOverviewMetrics(region) {
+  const segments = region.days.flatMap((day) => day.routeBreakdown ?? []);
+  const cyclingSegments = segments.filter((segment) => segment.includedInRideDistance === true);
+  const distanceSegments = cyclingSegments.filter((segment) => Number.isFinite(segment.distanceKm));
+  const distanceKm = distanceSegments.length ? distanceSegments.reduce((total, segment) => total + segment.distanceKm, 0) : null;
+  const elevationSegments = cyclingSegments.filter((segment) => Number.isFinite(segment.elevationGainM));
+  const hasCompleteElevation = cyclingSegments.length > 0 && elevationSegments.length === cyclingSegments.length;
+  const elevationGainM = hasCompleteElevation ? elevationSegments.reduce((total, segment) => total + segment.elevationGainM, 0) : null;
+  const sourceLinks = [...new Map(cyclingSegments.flatMap((segment) => [
+    segment.sourceUrl ? [`distance-${segment.segment}`, { label: `Distance source: ${segment.segment}`, url: segment.sourceUrl }] : null,
+    segment.elevationSourceUrl ? [`elevation-${segment.segment}`, { label: `Elevation source: ${segment.segment}`, url: segment.elevationSourceUrl }] : null
+  ].filter(Boolean)).map(([key, source]) => [key, source])).values()];
+
+  return {
+    distanceKm,
+    distanceStatus: combinedStatus(distanceSegments.map((segment) => segment.distanceStatus)),
+    elevationGainM,
+    elevationStatus: hasCompleteElevation ? combinedStatus(elevationSegments.map((segment) => segment.elevationStatus)) : elevationSegments.length ? 'needs-confirmation' : 'pending',
+    sourceLinks
+  };
+}
+
+function KaohsiungOverviewMetrics({ region }) {
+  const metrics = getKaohsiungOverviewMetrics(region);
+  return (
+    <div className="mt-6 grid gap-3 border-t border-ink/10 pt-5 text-[10px] font-bold uppercase tracking-[.15em] text-ink/45 sm:grid-cols-2">
+      <div>
+        <p>Cycling distance</p>
+        <p className="mt-1 font-display text-2xl normal-case tracking-[-.03em] text-ink">{metrics.distanceKm == null ? 'Pending measurement' : `${metrics.distanceKm.toFixed(2)} km`}</p>
+        <p className="mt-1 normal-case tracking-normal text-ink/55">{STATUS_LABELS[metrics.distanceStatus]}</p>
+      </div>
+      <div>
+        <p>Elevation gain</p>
+        <p className="mt-1 font-display text-2xl normal-case tracking-[-.03em] text-ink">{metrics.elevationGainM == null ? 'Needs confirmation' : `${metrics.elevationGainM} m`}</p>
+        <p className="mt-1 normal-case tracking-normal text-ink/55">{STATUS_LABELS[metrics.elevationStatus]}</p>
+      </div>
+      {metrics.sourceLinks.length > 0 && <div className="sm:col-span-2"><p>Sources</p><div className="mt-1 flex flex-wrap gap-x-4 gap-y-1 normal-case tracking-normal">{metrics.sourceLinks.map((source) => <a key={source.url + source.label} href={source.url} target="_blank" rel="noreferrer" className="min-h-11 inline-flex items-center text-ink underline decoration-terracotta underline-offset-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta" aria-label={source.label}>{source.label}</a>)}</div></div>}
+    </div>
+  );
+}
+
 export default function OverviewPage() {
   const { dispatch } = useAppState();
   const selectRoute = (routeId) => {
@@ -55,6 +118,7 @@ export default function OverviewPage() {
                     <p className="mt-4 text-sm leading-6 text-ink/60">{region.heroSummary}</p>
                     <p className="mt-6 text-xs font-semibold text-ink/45">{region.days.length} field notes · {region.dataStatus.replaceAll('-', ' ')}</p>
                   </button>
+                  {region.id === 'kaohsiung' && <KaohsiungOverviewMetrics region={region} />}
                 </article>
               ))}
             </div>

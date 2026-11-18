@@ -9,7 +9,7 @@
   --font-sans: "Inter", "Noto Sans", system-ui, sans-serif;
 }
 
-:root { font-family: var(--font-sans); color: #2d4030; background: #f5f5f0; font-synthesis: none; text-rendering: optimizeLegibility; }
+:root { --route-transition-copper: #C9824A; font-family: var(--font-sans); color: #2d4030; background: #f5f5f0; font-synthesis: none; text-rendering: optimizeLegibility; }
 html { scroll-behavior: smooth; }
 body { margin: 0; min-width: 320px; }
 button, a { -webkit-tap-highlight-color: transparent; }
@@ -450,7 +450,7 @@ button { cursor: pointer; }
 
 
 .route-transition-overlay__panel {
-  background: #e88918;
+  background: var(--route-transition-copper);
   isolation: isolate;
 }
 

@@ -57,6 +57,74 @@ const aggregateSource = (segments) => ({
   limitations: ROUTER_LIMITATIONS
 });
 
+const userProvidedSource = {
+  sourceTitle: 'User-provided itinerary planning data',
+  sourceUrl: null,
+  sourceType: 'user-provided',
+  checkedAt: null,
+  measurementMethod: 'Values supplied in the itinerary brief; no independent route measurement recorded.',
+  quote: 'Cycling distances and estimated ride times were supplied by the user.',
+  limitations: 'Transport rules, bicycle carriage and route-specific availability remain unverified.'
+};
+
+const userProvided = ({ segment, from, to, mode, distanceKm, estimatedRideTime = null, elevationGainM = null, elevationStatus = 'pending', includedInRideDistance, notes }) => ({
+  segment,
+  from,
+  to,
+  mode,
+  distanceKm,
+  estimatedRideTime,
+  distanceStatus: 'source-provided',
+  sourceTitle: userProvidedSource.sourceTitle,
+  sourceUrl: userProvidedSource.sourceUrl,
+  sourceType: userProvidedSource.sourceType,
+  checkedAt: userProvidedSource.checkedAt,
+  measurementMethod: userProvidedSource.measurementMethod,
+  quote: userProvidedSource.quote,
+  limitations: userProvidedSource.limitations,
+  elevationGainM,
+  elevationStatus,
+  includedInRideDistance,
+  status: 'source-provided',
+  notes
+});
+
+const ELEVATION_SOURCE_TITLE = 'OpenTopoData SRTM90m elevation profile';
+const ELEVATION_SOURCE_TYPE = 'public reproducible elevation service';
+const ELEVATION_SOURCE_URL = 'https://api.opentopodata.org/v1/srtm90m';
+const ELEVATION_METHOD = '100 evenly spaced samples along the corresponding OSRM cycling geometry; positive elevation differences were summed.';
+const ELEVATION_LIMITATIONS = 'SRTM90m is an approximate terrain model, not an official cycling GPX. Sampling and route endpoint choices can change the result.';
+
+const researched = ({ segment, from, to, mode, distanceKm, researchedDistanceKm = null, estimatedRideTime = null, distanceStatus, elevationGainM = null, elevationStatus = 'pending', includedInRideDistance, sourceTitle = ROUTER_SOURCE_TITLE, sourceUrl = null, sourceType = ROUTER_SOURCE_TYPE, measurementMethod = 'OSRM cycling profile using the listed OSM place coordinates.', quote, limitations = ROUTER_LIMITATIONS, notes }) => ({
+  segment,
+  from,
+  to,
+  mode,
+  distanceKm,
+  researchedDistanceKm,
+  estimatedRideTime,
+  distanceStatus,
+  sourceTitle,
+  sourceUrl,
+  sourceType,
+  checkedAt: '2026-11-18',
+  measurementMethod,
+  quote,
+  limitations,
+  elevationGainM,
+  elevationStatus,
+  elevationSourceTitle: elevationGainM == null ? null : ELEVATION_SOURCE_TITLE,
+  elevationSourceUrl: elevationGainM == null ? null : ELEVATION_SOURCE_URL,
+  elevationSourceType: elevationGainM == null ? null : ELEVATION_SOURCE_TYPE,
+  elevationCheckedAt: elevationGainM == null ? null : '2026-11-18',
+  elevationMeasurementMethod: elevationGainM == null ? null : ELEVATION_METHOD,
+  elevationQuote: elevationGainM == null ? null : `SRTM90m sampling returned approximately ${elevationGainM} m of positive elevation gain.`,
+  elevationLimitations: elevationGainM == null ? null : ELEVATION_LIMITATIONS,
+  includedInRideDistance,
+  status: distanceStatus,
+  notes
+});
+
 export const DAY_ROUTE_MEASUREMENTS = {
   'day-01': {
     distanceKm: 38.02,
@@ -124,40 +192,58 @@ export const DAY_ROUTE_MEASUREMENTS = {
     notes: 'The measured segments total 3.92 km. Anping Old Street is included as an intermediate stop within the first routed segment; cumulative elevation remains pending.'
   },
   'day-05': {
-    distanceKm: 4.61,
-    distanceStatus: 'estimated',
-    distanceCheckedAt: CHECKED_AT,
-    distanceSource: aggregateSource([1, 2]),
+    distanceKm: null,
+    estimatedRideTime: null,
+    distanceStatus: 'conflicting-information',
+    distanceCheckedAt: null,
+    distanceSource: {
+      sourceTitle: ROUTER_SOURCE_TITLE,
+      sourceUrl: null,
+      sourceType: ROUTER_SOURCE_TYPE,
+      checkedAt: '2026-11-18',
+      measurementMethod: 'Summary of the researched OSRM cycling segments below; the user-provided 46 km plan conflicts with the reproducible route result.',
+      quote: 'The OSRM route result and the user-provided itinerary value are not identical.',
+      limitations: ROUTER_LIMITATIONS
+    },
     elevationGainM: null,
-    elevationStatus: 'pending',
+    elevationStatus: 'needs-confirmation',
     elevationCheckedAt: null,
     elevationSource: null,
     routeBreakdown: [
-      pending('Meinong → central Kaohsiung transfer', 'transfer', false),
-      estimated({ segment: 'Formosa Boulevard → Pier-2 Art Center', from: 'Formosa Boulevard', to: 'Pier-2 Art Center', distanceKm: 2.73, durationMin: 5.9, sourceUrl: 'https://router.project-osrm.org/route/v1/cycling/120.3018602,22.6313941;120.2816179,22.619526?overview=false&steps=false' }),
-      estimated({ segment: 'Pier-2 Art Center → Kaohsiung harbour / Gushan Ferry', from: 'Pier-2 Art Center', to: 'Kaohsiung harbour / Gushan Ferry', distanceKm: 1.88, durationMin: 5.2, sourceUrl: 'https://router.project-osrm.org/route/v1/cycling/120.2816179,22.619526;120.2700121,22.6198948?overview=false&steps=false' })
+      researched({ segment: 'Zuoying HSR Station → Meinong Folk Village', from: 'Zuoying HSR Station', to: 'Meinong Folk Village', mode: 'cycling', distanceKm: 46, researchedDistanceKm: 39.03, estimatedRideTime: '2 hr 30 min (user-provided)', distanceStatus: 'conflicting-information', elevationGainM: 241, elevationStatus: 'estimated', includedInRideDistance: true, sourceUrl: 'https://router.project-osrm.org/route/v1/cycling/120.3076744,22.6872433;120.5142385,22.8928713?overview=false&steps=false', quote: 'OSRM returned 39.03 km; the user-provided itinerary lists 46 km.', notes: 'The route endpoint is reproducible, but the measured distance conflicts with the user-provided 46 km plan. Elevation is an SRTM90m estimate.' }),
+      userProvided({ segment: 'Meinong Folk Village → Zuoying', from: 'Meinong Folk Village', to: 'Zuoying', mode: 'bus with bicycle', distanceKm: 0, includedInRideDistance: false, notes: 'The bicycle is carried on the return bus because of the strong afternoon sun.' }),
+      userProvided({ segment: 'Zuoying → Formosa Boulevard Station', from: 'Zuoying', to: 'Formosa Boulevard Station', mode: 'MRT', distanceKm: 0, includedInRideDistance: false, notes: 'Take the MRT to Formosa Boulevard after returning to Zuoying.' }),
+      researched({ segment: 'Formosa Boulevard accommodation → Pier-2 Art Center', from: 'Formosa Boulevard accommodation', to: 'Pier-2 Art Center', mode: 'cycling', distanceKm: 2.7, researchedDistanceKm: 2.73, estimatedRideTime: '13 min (user-provided)', distanceStatus: 'estimated', elevationGainM: 38, elevationStatus: 'estimated', includedInRideDistance: true, sourceUrl: 'https://router.project-osrm.org/route/v1/cycling/120.3018602,22.6313941;120.2816179,22.619526?overview=false&steps=false', quote: 'OSRM returned 2.73 km; the user-provided itinerary lists 2.7 km.', notes: 'The measured route is close to the user-provided 2.7 km plan. Elevation is an SRTM90m estimate.' })
     ],
-    measurementStatus: 'estimated',
-    notes: 'The measured evening harbour segments total 4.61 km. The Meinong transfer is excluded from cycling distance and the actual handoff remains unconfirmed.'
+    measurementStatus: 'conflicting-information',
+    notes: 'The OSRM-measured cycling segments total 41.76 km, while the user-provided plan totals 48.7 km. Bus and MRT transfers are excluded from cycling distance.'
   },
   'day-06': {
-    distanceKm: 10.93,
-    distanceStatus: 'estimated',
-    distanceCheckedAt: CHECKED_AT,
-    distanceSource: aggregateSource([4]),
+    distanceKm: null,
+    estimatedRideTime: null,
+    distanceStatus: 'conflicting-information',
+    distanceCheckedAt: null,
+    distanceSource: {
+      sourceTitle: ROUTER_SOURCE_TITLE,
+      sourceUrl: null,
+      sourceType: ROUTER_SOURCE_TYPE,
+      checkedAt: '2026-11-18',
+      measurementMethod: 'Summary of the researched OSRM cycling segments below; the user-provided distances conflict with some reproducible route results.',
+      quote: 'The OSRM route results and the user-provided itinerary values are not identical for all endpoints.',
+      limitations: ROUTER_LIMITATIONS
+    },
     elevationGainM: null,
-    elevationStatus: 'pending',
+    elevationStatus: 'needs-confirmation',
     elevationCheckedAt: null,
     elevationSource: null,
     routeBreakdown: [
-      estimated({ segment: 'Lotus Pond → Gushan Ferry terminal', from: 'Lotus Pond', to: 'Gushan Ferry terminal', distanceKm: 9.36, durationMin: 18.8, sourceUrl: 'https://router.project-osrm.org/route/v1/cycling/120.2964465,22.6838369;120.2700121,22.6198948?overview=false&steps=false' }),
-      pending('Gushan → Qijin Ferry crossing', 'ferry', false),
-      estimated({ segment: 'Qijin Ferry terminal → Qihou Lighthouse', from: 'Qijin Ferry terminal', to: 'Qihou Lighthouse', distanceKm: 0.41, durationMin: 1.8, sourceUrl: 'https://router.project-osrm.org/route/v1/cycling/120.2697572,22.6139102;120.2671891,22.6142256?overview=false&steps=false' }),
-      estimated({ segment: 'Qihou Lighthouse → Qihou Fort', from: 'Qihou Lighthouse', to: 'Qihou Fort', distanceKm: 0.27, durationMin: 1.2, sourceUrl: 'https://router.project-osrm.org/route/v1/cycling/120.2671891,22.6142256;120.2641796,22.6131619?overview=false&steps=false' }),
-      estimated({ segment: 'Qihou Fort → Qijin sunset area', from: 'Qihou Fort', to: 'Qijin sunset area', distanceKm: 0.89, durationMin: 1.8, sourceUrl: 'https://router.project-osrm.org/route/v1/cycling/120.2641796,22.6131619;120.2690771,22.6071214?overview=false&steps=false' })
+      researched({ segment: 'Formosa Boulevard Station → Lotus Pond', from: 'Formosa Boulevard Station', to: 'Lotus Pond', mode: 'cycling', distanceKm: 7.5, researchedDistanceKm: 6.88, estimatedRideTime: '32 min (user-provided)', distanceStatus: 'conflicting-information', elevationGainM: 98, elevationStatus: 'estimated', includedInRideDistance: true, sourceUrl: 'https://router.project-osrm.org/route/v1/cycling/120.3018602,22.6313941;120.2964465,22.6838369?overview=false&steps=false', quote: 'OSRM returned 6.88 km; the user-provided itinerary lists 7.5 km.', notes: 'The route endpoint is reproducible, but the measured distance conflicts with the user-provided 7.5 km plan. Elevation is an SRTM90m estimate.' }),
+      userProvided({ segment: 'Lotus Pond local visit', from: 'Lotus Pond', to: 'Lotus Pond', mode: 'walking / sightseeing', distanceKm: 0, includedInRideDistance: false, notes: 'Local sightseeing is not included in cycling distance.' }),
+      researched({ segment: 'Kaohsiung city → Cijin', from: 'Kaohsiung city', to: 'Cijin', mode: 'cycling and ferry connection', distanceKm: 11, researchedDistanceKm: 17.49, estimatedRideTime: '46 min (user-provided)', distanceStatus: 'needs-confirmation', includedInRideDistance: true, sourceUrl: 'https://router.project-osrm.org/route/v1/cycling/120.3018602,22.6313941;120.2697572,22.6139102?overview=false&steps=false', quote: 'A candidate OSRM route to the selected Cijin ferry terminal returned 17.49 km; the user-provided cycling portion is 11 km.', limitations: 'The intended cycling endpoint and ferry split are not fully specified, so the candidate route cannot verify the 11 km segment.', notes: 'Keep the user-provided 11 km value until the exact Cijin endpoint and ferry connection are confirmed.' }),
+      userProvided({ segment: 'Cijin ferry connection', from: 'Kaohsiung city', to: 'Cijin', mode: 'ferry', distanceKm: 0, includedInRideDistance: false, notes: 'Ferry transportation is kept separate from cycling distance.' })
     ],
-    measurementStatus: 'estimated',
-    notes: 'The four measured riding segments total 10.93 km. The Qijin ferry crossing is excluded; the route service does not establish ferry bicycle acceptance or cumulative elevation.'
+    measurementStatus: 'conflicting-information',
+    notes: 'The OSRM-measured Formosa Boulevard–Lotus Pond segment is 6.88 km; the Cijin 11 km cycling portion remains needs-confirmation because the exact endpoint and ferry split are not specified. Ferry and local sightseeing are excluded.'
   },
   'day-07': {
     distanceKm: null,
@@ -209,32 +295,35 @@ export const DAY_ROUTE_MEASUREMENTS = {
     notes: 'The two measured road segments total 59.59 km. Rail or shuttle distance is excluded; the actual Day 9 start point, Sanxiantai local access and cumulative elevation remain unconfirmed.'
   },
   'day-10': {
-    distanceKm: 3.79,
-    distanceStatus: 'estimated',
-    distanceCheckedAt: CHECKED_AT,
-    distanceSource: aggregateSource([2]),
-    elevationGainM: null,
-    elevationStatus: 'pending',
+    distanceKm: 3.8,
+    estimatedRideTime: '5–8 min',
+    distanceStatus: 'source-provided',
+    distanceCheckedAt: null,
+    distanceSource: userProvidedSource,
+    elevationGainM: 10,
+    elevationStatus: 'source-provided',
     elevationCheckedAt: null,
-    elevationSource: null,
+    elevationSource: userProvidedSource,
     routeBreakdown: [
-      estimated({ segment: 'Su-Ao Harbour → Su-Ao Cold Spring', from: 'Su-Ao Harbour', to: 'Su-Ao Cold Spring', distanceKm: 0.94, durationMin: 1.2, sourceUrl: 'https://router.project-osrm.org/route/v1/cycling/121.8580828,24.5942068;121.8510008,24.5968007?overview=false&steps=false' }),
-      estimated({ segment: 'Su-Ao Cold Spring → Nanfangao waterfront', from: 'Su-Ao Cold Spring', to: 'Nanfangao waterfront', distanceKm: 2.85, durationMin: 4, sourceUrl: 'https://router.project-osrm.org/route/v1/cycling/121.8510008,24.5968007;121.86608,24.5823919?overview=false&steps=false' })
+      userProvided({ segment: 'Su-Ao Railway Station → Su-Ao Cold Spring Park', from: 'Su-Ao Railway Station', to: 'Su-Ao Cold Spring Park', mode: 'cycling', distanceKm: 3.8, estimatedRideTime: '5–8 min', elevationGainM: 10, elevationStatus: 'source-provided', includedInRideDistance: true, notes: 'User-provided Day 10 route measurement.' })
     ],
-    measurementStatus: 'estimated',
-    notes: 'The measured local riding segments total 3.79 km. The selected attractions, access roads and cumulative elevation still require route-level confirmation.'
+    measurementStatus: 'source-provided',
+    notes: 'Distance, elevation gain and ride time are user-provided planning values and are not marked as official verification.'
   },
   'day-11': {
-    distanceKm: null,
-    distanceStatus: 'pending',
+    distanceKm: 54,
+    estimatedRideTime: '3 hr 40 min',
+    distanceStatus: 'source-provided',
     distanceCheckedAt: null,
-    distanceSource: null,
-    elevationGainM: null,
-    elevationStatus: 'pending',
+    distanceSource: userProvidedSource,
+    elevationGainM: 50,
+    elevationStatus: 'source-provided',
     elevationCheckedAt: null,
-    elevationSource: null,
-    routeBreakdown: [pending('Wushi Harbor local riding'), pending('Wushi Harbor → Guishan Island boat', 'boat', false)],
-    measurementStatus: 'pending',
-    notes: 'Guishan Island boat travel and non-cycling island activity are excluded; the Wushi Harbor land route remains unmeasured.'
+    elevationSource: userProvidedSource,
+    routeBreakdown: [
+      userProvided({ segment: 'Nanfangao → Toucheng → Wushi Harbor', from: 'Nanfangao', to: 'Wushi Harbor', mode: 'cycling', distanceKm: 54, estimatedRideTime: '3 hr 40 min', elevationGainM: 50, elevationStatus: 'source-provided', includedInRideDistance: true, notes: 'User-provided Day 11 route measurement.' })
+    ],
+    measurementStatus: 'source-provided',
+    notes: 'Distance, elevation gain and ride time are user-provided planning values and are not marked as official verification.'
   }
 };

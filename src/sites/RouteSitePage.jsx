@@ -123,6 +123,7 @@ function measurementStatusLabel(status) {
 function MeasurementEvidence({ day }) {
   const source = day.distanceSource;
   const hasBreakdown = day.routeBreakdown?.length > 0;
+  const isKaohsiungMeasuredDay = day.id === 'day-05' || day.id === 'day-06';
   if (!source && !hasBreakdown && !day.notes) return null;
   return (
     <div className="mt-4 border-t border-ink/10 pt-4 text-xs leading-5 text-ink/60">
@@ -132,14 +133,14 @@ function MeasurementEvidence({ day }) {
       </div>
       {day.notes && <p className="mt-2 max-w-2xl">{day.notes}</p>}
       {(hasBreakdown || source) && (
-        <details className="mt-3">
+        <details className="mt-3" open={isKaohsiungMeasuredDay}>
           <summary className="inline-flex min-h-11 cursor-pointer items-center rounded-full border border-ink/15 px-3 py-2 font-semibold text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta">View route details &amp; sources</summary>
           {hasBreakdown && <ul className="mt-3 space-y-2 border-l-2 border-ink/10 pl-3">
-            {day.routeBreakdown.map((segment) => <li key={segment.segment}><span className="font-semibold text-ink">{segment.segment}</span><span className="block">{segment.distanceKm == null ? 'Pending distance' : `${segment.distanceKm} km`} · {segment.elevationGainM == null ? 'Pending elevation' : `${segment.elevationGainM} m ascent`} · {segment.includedInRideDistance === false ? 'Excluded from cycling distance' : measurementStatusLabel(segment.status)}</span>{segment.sourceUrl && <a href={segment.sourceUrl} target="_blank" rel="noreferrer" className="mt-1 inline-flex min-h-11 items-center font-semibold text-ink underline decoration-terracotta underline-offset-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta" aria-label={`View route source for ${segment.segment}`}>View route source</a>}</li>)}
+            {day.routeBreakdown.map((segment) => <li key={segment.segment}><span className="font-semibold text-ink">{segment.segment}</span><span className="block text-ink/75">{segment.mode ?? 'Transport'} · {segment.includedInRideDistance === false ? `Cycling distance: ${segment.distanceKm ?? 0} km · Excluded from cycling distance` : segment.distanceKm == null ? 'Pending distance' : `${segment.distanceKm} km cycling`} · Ride time: {segment.estimatedRideTime ?? 'Not provided'}</span>{segment.researchedDistanceKm != null && <span className="block">Measured route: {segment.researchedDistanceKm} km</span>}<span className="block">Elevation gain: {segment.elevationGainM == null ? 'Pending measurement' : `${segment.elevationGainM} m`} · Status: {measurementStatusLabel(segment.status)}</span>{segment.notes && <span className="mt-1 block">{segment.notes}</span>}<span className="flex flex-wrap gap-x-4">{segment.sourceUrl && <a href={segment.sourceUrl} target="_blank" rel="noreferrer" className="mt-1 inline-flex min-h-11 items-center font-semibold text-ink underline decoration-terracotta underline-offset-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta" aria-label={`View distance source for ${segment.segment}`}>View distance source</a>}{segment.elevationSourceUrl && <a href={segment.elevationSourceUrl} target="_blank" rel="noreferrer" className="mt-1 inline-flex min-h-11 items-center font-semibold text-ink underline decoration-terracotta underline-offset-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta" aria-label={`View elevation source for ${segment.segment}`}>View elevation source</a>}</span></li>)}
           </ul>}
           {source && <div className="mt-4 border-l-2 border-terracotta pl-3">
             <p className="font-semibold text-ink">{source.sourceTitle}</p>
-            <p>{source.sourceType} · Checked {source.checkedAt}</p>
+            <p>{source.sourceType}{source.checkedAt ? ` · Checked ${source.checkedAt}` : ' · Independent check pending'}</p>
             <p className="mt-1">{source.measurementMethod}</p>
             <p className="mt-1">Limitation: {source.limitations}</p>
           </div>}
@@ -292,7 +293,7 @@ function RouteStory({ region }) {
             <p className="section-kicker">The route, in motion</p>
             <h2 className="section-title">{region.storyTitle ?? 'One region. Many horizons.'}</h2>
           </div>
-          <p className="max-w-sm text-sm leading-6 text-ink/55">{region.storyBody ?? 'A shared visual language for thirteen days of city streets, coastlines, islands and mountain transfers.'}</p>
+          {region.coastalBikeRoadImage ? <div className="relative aspect-[16/9] w-full max-w-sm overflow-hidden bg-[#dfe8e0]"><img src={region.coastalBikeRoadImage.src} alt={region.coastalBikeRoadImage.alt} loading="lazy" decoding="async" className="h-full w-full object-cover" /></div> : <p className="max-w-sm text-sm leading-6 text-ink/55">{region.storyBody ?? 'A shared visual language for thirteen days of city streets, coastlines, islands and mountain transfers.'}</p>}
         </div>
         <div className="flex items-center gap-4 border-t border-ink/10 pt-5 text-xs text-ink/45">
           <span className="h-px w-12 bg-terracotta" />
@@ -387,6 +388,7 @@ function RouteItinerary({ region }) {
             const elevation = modeDetails?.elevationM ?? day.elevationGainM ?? day.elevationM;
             const distanceStatus = day.distanceStatus ?? (day.measurementStatus ?? 'not-recorded');
             const elevationStatus = day.elevationStatus ?? (day.measurementStatus ?? 'not-recorded');
+            const segmentedMeasurementOnly = (day.id === 'day-05' || day.id === 'day-06') && day.routeBreakdown?.length > 0 && day.distanceKm == null;
             return (
               <article key={day.id} className="flex h-full flex-col overflow-hidden border border-ink/15 bg-rice">
                 <RouteImage day={day} />
@@ -404,9 +406,9 @@ function RouteItinerary({ region }) {
                     </div>
                   )}
                   <div className="mt-7 grid grid-cols-3 gap-4 border-y border-ink/15 py-5">
-                    <Stat label="Distance" value={day.distanceKm == null ? 'Pending measurement' : `${day.distanceKm} km`} />
+                    <Stat label="Distance" value={segmentedMeasurementOnly ? 'See route breakdown' : day.distanceKm == null ? 'Pending measurement' : `${day.distanceKm} km`} />
                     <Stat label="Elevation gain" value={elevation == null ? 'Pending measurement' : `${elevation} m`} />
-                    <Stat label="Ride time" value={day.estimatedRideTime} />
+                    <Stat label="Ride time" value={segmentedMeasurementOnly ? 'See route breakdown' : day.estimatedRideTime} />
                   </div>
                   <div className="mt-4 grid gap-2 text-[10px] font-bold uppercase tracking-[.14em] text-ink/45 sm:grid-cols-2">
                     <span>Distance: {measurementStatusLabel(distanceStatus)}</span>

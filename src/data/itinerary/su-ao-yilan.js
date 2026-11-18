@@ -10,7 +10,10 @@ export const SU_AO_YILAN_REGION = {
   heroEyebrow: 'SITE 05 / EAST COAST TRANSFER',
   heroSummary: 'A short ride through Chenggong and Sanxiantai before the northbound transfer to Yilan.',
   storyTitle: 'Coastline to connection.',
-  storyBody: 'Keep the riding segment light and leave space for the rail or shuttle handoff into the next coast.',
+  coastalBikeRoadImage: {
+    src: '/images/regions/su-ao-yilan/coastal-bike-road.jpg',
+    alt: 'Coastal cycling road beside the sea near Su-Ao'
+  },
   visualPreset: 'transfer',
   hiddenDayIds: ['day-09'],
   heroImage: '/images/regions/su-ao-yilan/nanfangao-fish-market.jpg',
@@ -25,11 +28,11 @@ export const SU_AO_YILAN_REGION = {
   alternativeCoastFeature: {
     id: 'neipi-wushi-harbor', eyebrow: 'A TWO-DAY FIELD NOTE',
     title: 'Beaches in the morning. Harbor culture by afternoon.',
-    body: 'Use the coast as a slower alternative: enjoy Neipi Beach for open sea views, then visit Wushi Harbor to experience Taiwan’s fishing harbor culture.',
+    body: 'Follow the coast for two days, from Neipi Beach’s open horizons to Wushi Harbor’s working waterfront and Guishan Island’s blue waters.',
     variant: 'coast-harbor', accent: '#63B6C9',
     stops: [
-      { id: 'neipi-beach', name: 'Neipi Beach', description: 'A quiet coastal stop for beach views, sea air and a slower shoreline rhythm.', image: '/images/regions/su-ao-yilan/nanfangao-neipi-bay.jpg', imageAlt: 'Neipi Beach and the surrounding coastline' },
-      { id: 'wushi-harbor', name: 'Wushi Harbor', description: 'A harbor stop for fishing boats, working waterfronts and Taiwan coastal culture.', image: '/images/regions/su-ao-yilan/wushi-harbor.jpg', imageAlt: 'Wushi Harbor and Taiwan fishing harbor culture' }
+      { id: 'wushi-harbor', name: 'Wushi Harbor', description: 'A harbor stop for fishing boats, working waterfronts and Taiwan coastal culture.', image: '/images/regions/su-ao-yilan/wushi-harbor.jpg', imageAlt: 'Wushi Harbor and Taiwan fishing harbor culture' },
+      { id: 'neipi-beach', name: 'Neipi Beach', description: 'A quiet coastal stop for beach views, sea air and a slower shoreline rhythm.', image: '/images/regions/su-ao-yilan/nanfangao-neipi-bay.jpg', imageAlt: 'Neipi Beach and the surrounding coastline' }
     ]
   },
   days: [
@@ -66,9 +69,9 @@ export const SU_AO_YILAN_REGION = {
       id: 'day-10',
       day: 10,
       title: 'Su-Ao Harbour, Cold Springs & North Link',
-      route: 'Su-Ao Harbour → Su-Ao Cold Spring → Su-Ao / Nanfangao waterfront',
+      route: 'Su-Ao Harbour → Su-Ao / Nanfangao Waterfront → Su-Ao Cold Spring',
       distanceKm: null,
-      distanceNote: 'Official regional references are available, but the final riding distance still needs route measurement.',
+      distanceNote: 'The user-provided route measurement is shown as source-provided data.',
       estimatedRideTime: null,
       elevationM: null,
       highlights: [
@@ -108,9 +111,9 @@ export const SU_AO_YILAN_REGION = {
       id: 'day-11',
       day: 11,
       title: 'Wushi Harbor & Guishan Island',
-      route: 'Wushi Harbor → Guishan Island (official application required)',
+      route: 'Wushi Harbor → Guishan Island',
       distanceKm: null,
-      distanceNote: 'Wushi Harbor and Guishan Island are official regional references; boat timing and route distance still need confirmation.',
+      distanceNote: 'The user-provided route measurement is shown as source-provided data; Guishan Island access still requires the official application and boat plan.',
       estimatedRideTime: null,
       elevationM: null,
       highlights: [
